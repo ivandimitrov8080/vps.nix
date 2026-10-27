@@ -16,36 +16,39 @@
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # the code shared by all hosts lives in the hosts.nix repo
+    # src.url = "github:ivandimitrov8080/hosts.nix?dir=src";
+    src = {
+      url = "git+file:///home/ivand/src/hosts.nix?dir=src";
+      flake = false;
+    };
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
     webshite.url = "github:ivandimitrov8080/idimitrov.dev";
   };
   outputs =
-    inputs@{ nixpkgs, ... }:
+    inputs@{ self, nixpkgs, ... }:
+    let
+      docsConfig = self.nixosConfigurations.vps;
+      overlays = import (inputs.src + "/overlays.nix") { inherit inputs docsConfig; };
+      nixosModules = import (inputs.src + "/modules") { inherit inputs overlays; };
+    in
     {
-      # hosts.nix passes in its shared tree (src) and the config to take the
-      # nixos option docs from, so nothing has to be duplicated here
-      mkHost =
-        { src, docsConfig }:
-        let
-          overlays = import (src + "/overlays.nix") { inherit inputs docsConfig; };
-          nixosModules = import (src + "/modules") { inherit inputs overlays; };
-        in
-        nixpkgs.lib.nixosSystem {
-          modules = with nixosModules; [
-            default
-            wg
-            (import ./vpsadminos.nix { inherit inputs; })
-            (import ./mail.nix)
-            (import ./nginx.nix { inherit inputs; })
-            {
-              nixpkgs.hostPlatform = "x86_64-linux";
-              imports = [
-                inputs.vpsadminos.nixosConfigurations.containerUnstable
-              ];
-              _module.args.system = "x86_64-linux";
-              networking.nftables.ruleset = "";
-            }
-          ];
-        };
+      nixosConfigurations.vps = nixpkgs.lib.nixosSystem {
+        modules = with nixosModules; [
+          default
+          wg
+          (import ./vpsadminos.nix { inherit inputs; })
+          (import ./mail.nix)
+          (import ./nginx.nix { inherit inputs; })
+          {
+            nixpkgs.hostPlatform = "x86_64-linux";
+            imports = [
+              inputs.vpsadminos.nixosConfigurations.containerUnstable
+            ];
+            _module.args.system = "x86_64-linux";
+            networking.nftables.ruleset = "";
+          }
+        ];
+      };
     };
 }
