@@ -91,9 +91,7 @@ in
             inherit (lib) concatStrings flip mapAttrsToList;
             htpasswd = pkgs.writeText "radicale.users" (
               concatStrings (
-                flip mapAttrsToList config.mailserver.accounts (
-                  mail: user: mail + ":" + user.hashedPassword + "\n"
-                )
+                flip mapAttrsToList config.mailserver.accounts (mail: user: mail + ":" + user.hashedPassword + "\n")
               )
             );
           in

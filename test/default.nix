@@ -3,7 +3,10 @@
 #
 # The nodes are built from the same shared meta.* modules the real hosts use,
 # so this test also covers configuration.nix's wireguard/dns code.
-{ inputs, system ? "x86_64-linux" }:
+{
+  inputs,
+  system ? "x86_64-linux",
+}:
 let
   pkgs = import inputs.nixpkgs {
     inherit system;
@@ -88,7 +91,7 @@ let
       wg ? null,
       extraModules ? [ ],
     }:
-    { ... }:
+    _:
     {
       imports = [ configMod ] ++ optional (wg != null) (wgModule wg) ++ extraModules;
       virtualisation.vlans = [ internetVlan ];
@@ -116,7 +119,11 @@ let
     // testUser;
 
   wgModule =
-    { self, ip, keyFile }:
+    {
+      self,
+      ip,
+      keyFile,
+    }:
     {
       environment.etc."wireguard/wg0.priv".source = keyFile;
       meta.wireguard = {
