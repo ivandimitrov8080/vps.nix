@@ -43,6 +43,7 @@
           }
         ];
       };
+      integrationTest = (import ./test { inherit inputs system; }).integrationTest;
     in
     {
       nixosConfigurations.default = host;
@@ -53,7 +54,7 @@
         '';
 
         # integration test: uses only this flake's inputs, never another host flake
-        integration = (import ./test { inherit inputs system; }).integrationTest;
+        integration = integrationTest;
       };
     };
 }

@@ -95,6 +95,7 @@ let
     {
       imports = [ configMod ] ++ optional (wg != null) (wgModule wg) ++ extraModules;
       virtualisation.vlans = [ internetVlan ];
+      environment.systemPackages = extraPkgs;
       networking = {
         useNetworkd = mkForce true;
         useDHCP = mkForce false;
@@ -158,7 +159,6 @@ let
       };
     };
     environment = {
-      systemPackages = extraPkgs;
       etc."dnscrypt-proxy/cloaking_rules.txt".text = ''
         *.idimitrov.dev ${vpsfreeInternetIp}
       '';
@@ -175,7 +175,6 @@ let
   outsiderDns = {
     networking.nameservers = [ dnsInternetIp ];
     services.resolved.enable = true;
-    environment.systemPackages = extraPkgs;
   };
 in
 {
@@ -236,7 +235,17 @@ in
         _:
         {
           _module.args.system = system;
-          meta.host.publicAddress = vpsfreeInternetIp;
+
+          # Mirrors ../host.nix, which this test does not import: the hub runs
+          # its own dnscrypt-proxy, listening on the wireguard address.
+          meta = {
+            host.publicAddress = vpsfreeInternetIp;
+            dns = {
+              servers = [ vpsfreeWgIp ];
+              listen.address = vpsfreeWgIp;
+              dnscrypt.enable = true;
+            };
+          };
           virtualisation = {
             memorySize = 4096;
             vlans = [ publicVlan ];
