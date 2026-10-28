@@ -49,12 +49,7 @@
       nixosConfigurations.default = host;
 
       checks.${system} = {
-        default = nixpkgs.legacyPackages.${system}.runCommand "eval-vps" { } ''
-          echo ${builtins.unsafeDiscardStringContext host.config.system.build.toplevel.drvPath} > $out
-        '';
-
-        # integration test: uses only this flake's inputs, never another host flake
-        integration = integrationTest;
+        default = integrationTest;
       };
     };
 }
