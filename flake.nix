@@ -25,7 +25,7 @@
       system = "x86_64-linux";
     in
     {
-      nixosConfigurations.vps = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
         # meta.host.* reads the flake inputs from here.
         specialArgs = { inherit inputs; };
         modules = [
