@@ -19,13 +19,8 @@ in
   };
   networking.hostName = "vpsfree";
   meta = {
-    dnscrypt.enable = true;
     mail.enable = true;
     bingwp.enable = true;
-    wireguard = {
-      enable = true;
-      address = "10.0.0.1/24";
-    };
   };
   documentation = {
     enable = false;

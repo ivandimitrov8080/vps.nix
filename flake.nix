@@ -23,23 +23,22 @@
     inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
-      modules = import ./modules.nix { inherit inputs; };
     in
     {
       nixosConfigurations.vps = nixpkgs.lib.nixosSystem {
+        # meta.host.* reads the flake inputs from here.
+        specialArgs = { inherit inputs; };
         modules = [
-          modules.default
-          modules.wg
+          inputs.configuration.nixosModules.default
+          (import ./host.nix { inherit inputs; })
           (import ./vpsadminos.nix { inherit inputs; })
           (import ./mail.nix)
           (import ./nginx.nix { inherit inputs; })
           {
-            nixpkgs.hostPlatform = system;
             imports = [
               inputs.vpsadminos.nixosConfigurations.containerUnstable
             ];
             _module.args.system = system;
-            networking.nftables.ruleset = "";
           }
         ];
       };

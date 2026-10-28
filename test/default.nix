@@ -1,5 +1,8 @@
 # Integration test for the vps configuration. It lives in this flake, so it
 # uses only this repository's inputs and never another host flake.
+#
+# The nodes are built from the same shared meta.* modules the real hosts use,
+# so this test also covers configuration.nix's wireguard/dns code.
 { inputs, system ? "x86_64-linux" }:
 let
   pkgs = import inputs.nixpkgs {
@@ -7,32 +10,51 @@ let
     overlays = [ inputs.configuration.overlays.default ];
   };
   inherit (pkgs) lib;
-  inherit (lib) mkForce;
+  inherit (lib) mkForce optional;
+
   configMod = inputs.configuration.nixosModules.default;
   vpsadminosModule = import ../vpsadminos.nix { inherit inputs; };
   mail = import ../mail.nix;
   nginx = import ../nginx.nix { inherit inputs; };
-  hubPub = builtins.readFile ./hub.pub;
-  spoke1Pub = builtins.readFile ./spoke1.pub;
-  spoke2Pub = builtins.readFile ./spoke2.pub;
-  peers = [
-    {
-      PublicKey = hubPub;
-      AllowedIPs = [
-        "${vpsfreeWgIp}/32"
-        "0.0.0.0/0"
-      ];
-      Endpoint = "${vpsfreeInternetIp}:51820";
-    }
-    {
-      PublicKey = spoke1Pub;
-      AllowedIPs = [ "${novaWgIp}/32" ];
-    }
-    {
-      PublicKey = spoke2Pub;
-      AllowedIPs = [ "${spoke2WgIp}/32" ];
-    }
-  ];
+
+  # --- test network ------------------------------------------------------
+  internetVlan = 10;
+  publicVlan = 20;
+  internetGw = "192.168.100.1";
+  internetCidrPrefix = 24;
+  publicGwIp = "37.205.13.1";
+  publicCidr = "37.205.13.0";
+
+  # "internet side" addresses
+  dnsInternetIp = "192.168.100.53";
+  novaInternetIp = "192.168.100.10";
+  spoke2InternetIp = "192.168.100.11";
+  outsiderInternetIp = "192.168.100.12";
+
+  # wireguard side addresses
+  vpsfreeWgIp = "10.0.0.1";
+  novaWgIp = "10.0.0.2";
+  spoke2WgIp = "10.0.0.3";
+  vpsfreeInternetIp = "37.205.13.29";
+
+  # Same shape as ../peers.nix, only with throwaway keys.
+  peers = {
+    vpsfree = {
+      ip = vpsfreeWgIp;
+      publicKey = builtins.readFile ./hub.pub;
+      endpoint = "${vpsfreeInternetIp}:51820";
+      persistentKeepalive = 7;
+    };
+    nova = {
+      ip = novaWgIp;
+      publicKey = builtins.readFile ./spoke1.pub;
+    };
+    spoke2 = {
+      ip = spoke2WgIp;
+      publicKey = builtins.readFile ./spoke2.pub;
+    };
+  };
+
   extraPkgs = with pkgs; [
     wireguard-tools
     dig
@@ -41,58 +63,113 @@ let
     nmap
     swaks
   ];
+
   testUser = {
     users = {
-      users = {
-        test = {
-          isNormalUser = true;
-          password = "test";
-          extraGroups = [
-            "wheel"
-            "adm"
-            "mlocate"
-            "ssh"
+      users.test = {
+        isNormalUser = true;
+        password = "test";
+        extraGroups = [
+          "wheel"
+          "adm"
+          "mlocate"
+          "ssh"
+        ];
+      };
+      groups.ssh = { };
+    };
+  };
+
+  # A node on the "internet" VLAN: one static address and a route to the
+  # public subnet through the router.
+  mkInternetNode =
+    {
+      address,
+      wg ? null,
+      extraModules ? [ ],
+    }:
+    { ... }:
+    {
+      imports = [ configMod ] ++ optional (wg != null) (wgModule wg) ++ extraModules;
+      virtualisation.vlans = [ internetVlan ];
+      networking = {
+        useNetworkd = mkForce true;
+        useDHCP = mkForce false;
+        enableIPv6 = mkForce false;
+        interfaces.eth1.ipv4 = {
+          addresses = [
+            {
+              inherit address;
+              prefixLength = internetCidrPrefix;
+            }
+          ];
+          routes = [
+            {
+              address = publicCidr;
+              prefixLength = 24;
+              via = internetGw;
+            }
           ];
         };
       };
-      groups = {
-        ssh = { };
+    }
+    // testUser;
+
+  wgModule =
+    { self, ip, keyFile }:
+    {
+      environment.etc."wireguard/wg0.priv".source = keyFile;
+      meta.wireguard = {
+        enable = true;
+        inherit self;
+        address = "${ip}/24";
+        privateKeyFile = "/etc/wireguard/wg0.priv";
+        peers = mkForce peers;
+      };
+    };
+
+  # A spoken that may only talk DNS to the hub.
+  dnsClient = {
+    meta.dns = {
+      servers = [ vpsfreeWgIp ];
+      egress.restrict = true;
+    };
+  };
+
+  # The authoritative dnscrypt resolver for the test (stands in for the one on
+  # the real vps).
+  dnsServer = {
+    meta.dns = {
+      servers = [ dnsInternetIp ];
+      listen.address = dnsInternetIp;
+      dnscrypt = {
+        enable = true;
+        settings = {
+          offline_mode = true;
+          cloaking_rules = "/etc/dnscrypt-proxy/cloaking_rules.txt";
+        };
+      };
+    };
+    environment = {
+      systemPackages = extraPkgs;
+      etc."dnscrypt-proxy/cloaking_rules.txt".text = ''
+        *.idimitrov.dev ${vpsfreeInternetIp}
+      '';
+    };
+    networking = {
+      nftables.enable = true;
+      firewall = {
+        allowedTCPPorts = mkForce [ 53 ];
+        allowedUDPPorts = mkForce [ 53 ];
       };
     };
   };
-  blockDnsExceptDnscrypt = ''
-    table inet filter {
-      chain output {
-        type filter hook output priority 0; policy accept;
 
-        meta oifname "lo" accept
-
-        # Allow dns to server
-        ip daddr ${vpsfreeWgIp} udp dport 53 accept
-        ip daddr ${vpsfreeWgIp} tcp dport 53 accept
-
-        # Block DNS to anywhere else
-        udp dport 53 drop
-        tcp dport 53 drop
-        tcp dport 853 drop
-      }
-    }
-  '';
-  vpsfreeWgIp = "10.0.0.1";
-  novaWgIp = "10.0.0.2";
-  spoke2WgIp = "10.0.0.3";
-  vpsfreeInternetIp = "37.205.13.29";
-  internetVlan = 10;
-  publicVlan = 20;
-  internetGw = "192.168.100.1";
-  internetCidrPrefix = 24;
-  # “internet side” IPs
-  dnsInternetIp = "192.168.100.53";
-  novaInternetIp = "192.168.100.10";
-  spoke2InternetIp = "192.168.100.11";
-  outsiderInternetIp = "192.168.100.12";
-  # “public side” router IP (same subnet as vpsfreeIp)
-  publicGwIp = "37.205.13.1";
+  outsiderDns = {
+    networking.nameservers = [ dnsInternetIp ];
+    services.resolved.enable = true;
+    environment.systemPackages = extraPkgs;
+  };
 in
 {
   integrationTest = pkgs.testers.runNixOSTest {
@@ -127,7 +204,7 @@ in
             ];
 
             nftables.enable = true;
-            firewall.enable = false; # we’ll define forward policy ourselves
+            firewall.enable = false; # we'll define forward policy ourselves
             nftables.ruleset = ''
               table inet filter {
                 chain forward {
@@ -147,215 +224,93 @@ in
           boot.kernel.sysctl."net.ipv4.ip_forward" = true;
         }
         // testUser;
+
       vpsfree =
         _:
         {
           _module.args.system = system;
-          virtualisation.memorySize = 4096;
+          virtualisation = {
+            memorySize = 4096;
+            vlans = [ publicVlan ];
+          };
           imports = [
             configMod
             vpsadminosModule
             mail
             nginx
-          ];
-          virtualisation.vlans = [ publicVlan ];
-          networking = {
-            useDHCP = false;
-            interfaces = {
-              eth1.ipv4.addresses = [
-                {
-                  address = vpsfreeInternetIp;
-                  prefixLength = 24;
-                }
+            (wgModule {
+              self = "vpsfree";
+              ip = vpsfreeWgIp;
+              keyFile = ./hub.priv;
+            })
+            {
+              networking = {
+                useDHCP = false;
+                interfaces = {
+                  eth1.ipv4.addresses = [
+                    {
+                      address = vpsfreeInternetIp;
+                      prefixLength = 24;
+                    }
+                  ];
+                  eth1.ipv4.routes = [
+                    {
+                      address = "192.168.100.0";
+                      prefixLength = internetCidrPrefix;
+                      via = publicGwIp;
+                    }
+                  ];
+                };
+              };
+              services.dnscrypt-proxy.settings.offline_mode = true;
+              security.acme.defaults = {
+                email = mkForce "test@example.com";
+                server = mkForce "https://acme-staging-v02.api.letsencrypt.org/directory";
+              };
+              environment.systemPackages = extraPkgs;
+              systemd.tmpfiles.rules = [
+                # directory owned by nginx
+                "d /var/lib/geoip 0750 nginx nginx -"
+                # copy files, owned by nginx (C+ overwrites/updates)
+                "C+ /var/lib/geoip/iptoasn-asn-ipv4.mmdb 0640 nginx users - ${./dbip-asn.mmdb}"
+                "C+ /var/lib/geoip/iptoasn-country-ipv4.mmdb 0640 nginx users - ${./dbip-country.mmdb}"
+                "C+ /var/lib/geoip/iptoasn-asn-ipv6.mmdb 0640 nginx users - ${./dbip-asn.mmdb}"
+                "C+ /var/lib/geoip/iptoasn-country-ipv6.mmdb 0640 nginx users - ${./dbip-country.mmdb}"
               ];
-              eth1.ipv4.routes = [
-                {
-                  address = "192.168.100.0";
-                  prefixLength = internetCidrPrefix;
-                  via = publicGwIp;
-                }
-              ];
-            };
-          };
-          environment.etc."wireguard/wg0.priv".source = ./hub.priv;
-          services.dnscrypt-proxy.settings.offline_mode = true;
-          meta.wireguard = {
-            enable = true;
-            address = "${vpsfreeWgIp}/24";
-            privateKeyFile = "/etc/wireguard/wg0.priv";
-            peers = mkForce peers;
-          };
-          security.acme.defaults = {
-            email = mkForce "test@example.com";
-            server = mkForce "https://acme-staging-v02.api.letsencrypt.org/directory";
-          };
-          environment.systemPackages = extraPkgs;
-          systemd.tmpfiles.rules = [
-            # directory owned by nginx
-            "d /var/lib/geoip 0750 nginx nginx -"
-            # copy files, owned by nginx (C+ overwrites/updates)
-            "C+ /var/lib/geoip/iptoasn-asn-ipv4.mmdb 0640 nginx users - ${./dbip-asn.mmdb}"
-            "C+ /var/lib/geoip/iptoasn-country-ipv4.mmdb 0640 nginx users - ${./dbip-country.mmdb}"
-            "C+ /var/lib/geoip/iptoasn-asn-ipv6.mmdb 0640 nginx users - ${./dbip-asn.mmdb}"
-            "C+ /var/lib/geoip/iptoasn-country-ipv6.mmdb 0640 nginx users - ${./dbip-country.mmdb}"
+            }
           ];
         }
         // testUser;
-      nova =
-        _:
-        {
-          imports = [
-            configMod
-          ];
-          boot.consoleLogLevel = mkForce 7;
-          virtualisation.vlans = [ internetVlan ];
-          networking.useNetworkd = mkForce true;
-          networking.useDHCP = mkForce false;
-          networking.enableIPv6 = mkForce false;
-          networking.nameservers = [ vpsfreeWgIp ];
-          networking.nftables = {
-            enable = true;
-            ruleset = mkForce blockDnsExceptDnscrypt;
-          };
-          networking.interfaces.eth1.ipv4 = {
-            addresses = [
-              {
-                address = novaInternetIp;
-                prefixLength = internetCidrPrefix;
-              }
-            ];
-            routes = [
-              {
-                address = "37.205.13.0";
-                prefixLength = 24;
-                via = internetGw;
-              }
-            ];
-          };
-          services.resolved = {
-            enable = true;
-            settings.Resolve.FallbackDNS = [ vpsfreeWgIp ];
-          };
-          environment.etc."wireguard/wg0.priv".source = ./spoke1.priv;
-          meta.wireguard = {
-            enable = true;
-            address = "${novaWgIp}/24";
-            privateKeyFile = "/etc/wireguard/wg0.priv";
-            peers = mkForce peers;
-          };
-          environment.systemPackages = extraPkgs;
-        }
-        // testUser;
-      spoke2 =
-        _:
-        {
-          imports = [ configMod ];
-          environment.etc."wireguard/wg0.priv".source = ./spoke2.priv;
-          virtualisation.vlans = [ internetVlan ];
-          networking.useNetworkd = mkForce true;
-          networking.useDHCP = mkForce false;
-          networking.enableIPv6 = mkForce false;
-          networking.interfaces.eth1.ipv4.addresses = [
-            {
-              address = spoke2InternetIp;
-              prefixLength = internetCidrPrefix;
-            }
-          ];
-          networking.interfaces.eth1.ipv4.routes = [
-            {
-              address = "37.205.13.0";
-              prefixLength = 24;
-              via = internetGw;
-            }
-          ];
-          services.resolved.enable = true;
-          meta.wireguard = {
-            enable = true;
-            address = "${spoke2WgIp}/24";
-            privateKeyFile = "/etc/wireguard/wg0.priv";
-            peers = mkForce peers;
-          };
-          environment.systemPackages = extraPkgs;
-        }
-        // testUser;
-      dns =
-        _:
-        {
-          _module.args.system = system;
-          imports = [
-            configMod
-          ];
-          virtualisation.vlans = [ internetVlan ];
-          networking.useNetworkd = mkForce true;
-          networking.useDHCP = mkForce false;
-          networking.enableIPv6 = mkForce false;
-          networking.interfaces.eth1.ipv4.addresses = [
-            {
-              address = dnsInternetIp;
-              prefixLength = internetCidrPrefix;
-            }
-          ];
-          networking.interfaces.eth1.ipv4.routes = [
-            {
-              address = "37.205.13.0";
-              prefixLength = 24;
-              via = internetGw;
-            }
-          ];
-          meta.dnscrypt.enable = true;
-          services.dnscrypt-proxy.settings = {
-            offline_mode = true;
-            listen_addresses = [ "${dnsInternetIp}:53" ];
-            cloaking_rules = "/etc/dnscrypt-proxy/cloaking_rules.txt";
-          };
-          environment = {
-            systemPackages = extraPkgs;
-            etc."dnscrypt-proxy/cloaking_rules.txt".text = ''
-              *.idimitrov.dev ${vpsfreeInternetIp}
-            '';
-          };
-          networking = {
-            nftables.enable = true;
-            firewall = {
-              allowedTCPPorts = mkForce [
-                53
-              ];
-              allowedUDPPorts = mkForce [
-                53
-              ];
-            };
-          };
-        }
-        // testUser;
-      outsider =
-        _:
-        {
-          virtualisation.vlans = [ internetVlan ];
-          networking.interfaces.eth1.ipv4.addresses = [
-            {
-              address = outsiderInternetIp;
-              prefixLength = internetCidrPrefix;
-            }
-          ];
-          networking.interfaces.eth1.ipv4.routes = [
-            {
-              address = "37.205.13.0";
-              prefixLength = 24;
-              via = internetGw;
-            }
-          ];
-          environment.systemPackages = extraPkgs;
-          networking = {
-            useNetworkd = true;
-            useDHCP = false;
-            enableIPv6 = false;
-            nameservers = [
-              dnsInternetIp
-            ];
-          };
-          services.resolved.enable = true;
-        }
-        // testUser;
+
+      nova = mkInternetNode {
+        address = novaInternetIp;
+        wg = {
+          self = "nova";
+          ip = novaWgIp;
+          keyFile = ./spoke1.priv;
+        };
+        extraModules = [ dnsClient ];
+      };
+
+      spoke2 = mkInternetNode {
+        address = spoke2InternetIp;
+        wg = {
+          self = "spoke2";
+          ip = spoke2WgIp;
+          keyFile = ./spoke2.priv;
+        };
+        extraModules = [ { services.resolved.enable = true; } ];
+      };
+
+      dns = mkInternetNode {
+        address = dnsInternetIp;
+        extraModules = [ dnsServer ];
+      };
+
+      outsider = mkInternetNode {
+        address = outsiderInternetIp;
+        extraModules = [ outsiderDns ];
+      };
     };
 
     testScript =
