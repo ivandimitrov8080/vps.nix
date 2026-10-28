@@ -16,39 +16,34 @@
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # the code shared by all hosts lives in the hosts.nix repo
-    # src.url = "github:ivandimitrov8080/hosts.nix?dir=src";
-    src = {
-      url = "git+file:///home/ivand/src/hosts.nix?dir=src";
-      flake = false;
-    };
     vpsadminos.url = "github:vpsfreecz/vpsadminos";
     webshite.url = "github:ivandimitrov8080/idimitrov.dev";
   };
   outputs =
-    inputs@{ self, nixpkgs, ... }:
+    inputs@{ nixpkgs, ... }:
     let
-      docsConfig = self.nixosConfigurations.vps;
-      overlays = import (inputs.src + "/overlays.nix") { inherit inputs docsConfig; };
-      nixosModules = import (inputs.src + "/modules") { inherit inputs overlays; };
+      system = "x86_64-linux";
+      modules = import ./modules.nix { inherit inputs; };
     in
     {
       nixosConfigurations.vps = nixpkgs.lib.nixosSystem {
-        modules = with nixosModules; [
-          default
-          wg
+        modules = [
+          modules.default
+          modules.wg
           (import ./vpsadminos.nix { inherit inputs; })
           (import ./mail.nix)
           (import ./nginx.nix { inherit inputs; })
           {
-            nixpkgs.hostPlatform = "x86_64-linux";
+            nixpkgs.hostPlatform = system;
             imports = [
               inputs.vpsadminos.nixosConfigurations.containerUnstable
             ];
-            _module.args.system = "x86_64-linux";
+            _module.args.system = system;
             networking.nftables.ruleset = "";
           }
         ];
       };
+      # integration test: uses only this flake's inputs, never another host flake
+      checks.${system}.integration = (import ./test { inherit inputs system; }).integrationTest;
     };
 }
