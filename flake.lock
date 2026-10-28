@@ -947,9 +947,7 @@
       "inputs": {
         "configuration": "configuration",
         "emacs-overlay": "emacs-overlay",
-        "home-manager": "home-manager",
         "metronome": "metronome",
-        "neomacs": "neomacs",
         "nixpkgs": "nixpkgs_5",
         "simple-nixos-mailserver": "simple-nixos-mailserver",
         "vpsadminos": "vpsadminos",

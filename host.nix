@@ -1,7 +1,7 @@
-# Everything host specific about the VPS: overlays, wireguard identity and the
-# DNS server it hosts. Shared code lives in configuration.nix's
+# Everything host specific about the VPS: its wireguard identity and the DNS
+# server it hosts. Shared code lives in configuration.nix's
 # meta.{host,wireguard,dns} modules.
-{ inputs }:
+_:
 {
   ...
 }:
@@ -9,7 +9,10 @@
   imports = [ ./peers.nix ];
 
   meta = {
-    host.overlays = [ inputs.emacs-overlay.overlays.default ];
+    host = {
+      stateVersion = "26.05";
+      publicAddress = "37.205.13.29";
+    };
 
     wireguard = {
       enable = true;

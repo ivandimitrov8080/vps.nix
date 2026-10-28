@@ -5,12 +5,7 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     metronome.url = "github:ivandimitrov8080/metronome";
-    neomacs.url = "github:eval-exec/neomacs";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
@@ -23,9 +18,8 @@
     inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
-    in
-    {
-      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+
+      host = nixpkgs.lib.nixosSystem {
         # meta.host.* reads the flake inputs from here.
         specialArgs = { inherit inputs; };
         modules = [
@@ -39,10 +33,27 @@
               inputs.vpsadminos.nixosConfigurations.containerUnstable
             ];
             _module.args.system = system;
+            nixpkgs = {
+              hostPlatform = system;
+              overlays = [
+                inputs.emacs-overlay.overlays.default
+                inputs.configuration.overlays.default
+              ];
+            };
           }
         ];
       };
-      # integration test: uses only this flake's inputs, never another host flake
-      checks.${system}.integration = (import ./test { inherit inputs system; }).integrationTest;
+    in
+    {
+      nixosConfigurations.default = host;
+
+      checks.${system} = {
+        default = nixpkgs.legacyPackages.${system}.runCommand "eval-vps" { } ''
+          echo ${builtins.unsafeDiscardStringContext host.config.system.build.toplevel.drvPath} > $out
+        '';
+
+        # integration test: uses only this flake's inputs, never another host flake
+        integration = (import ./test { inherit inputs system; }).integrationTest;
+      };
     };
 }

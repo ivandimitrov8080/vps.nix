@@ -37,7 +37,7 @@ let
   # wireguard side addresses
   vpsfreeWgIp = "10.0.0.1";
   novaWgIp = "10.0.0.2";
-  spoke2WgIp = "10.0.0.3";
+  spoke2WgIp = "10.0.0.5";
   vpsfreeInternetIp = "37.205.13.29";
 
   # Same shape as ../peers.nix, only with throwaway keys.
@@ -236,6 +236,7 @@ in
         _:
         {
           _module.args.system = system;
+          meta.host.publicAddress = vpsfreeInternetIp;
           virtualisation = {
             memorySize = 4096;
             vlans = [ publicVlan ];

@@ -1,7 +1,22 @@
 { inputs }:
-{ pkgs, ... }:
+{
+  pkgs,
+  config,
+  ...
+}:
 let
-  system = "x86_64-linux";
+  system = pkgs.stdenv.hostPlatform.system;
+  publicIp = config.meta.host.publicAddress;
+  listenAddresses = [
+    "10.0.0.1"
+    publicIp
+  ];
+  geoipFiles = [
+    "iptoasn-asn-ipv4"
+    "iptoasn-country-ipv4"
+    "iptoasn-asn-ipv6"
+    "iptoasn-country-ipv6"
+  ];
 in
 {
   security = {
@@ -28,6 +43,7 @@ in
         sslCertificate = "/var/lib/acme/idimitrov.dev/fullchain.pem";
         sslCertificateKey = "/var/lib/acme/idimitrov.dev/key.pem";
       };
+      mkTlsHost = extra: tls // { inherit listenAddresses; } // extra;
       serveStatic = "try_files ${
         pkgs.lib.strings.concatStringsSep " " (
           map (x: "$uri.${x}") [
@@ -40,6 +56,12 @@ in
           ]
         )
       } $uri $uri/ =404;";
+      geoip2Block = file: body: ''
+        geoip2 /var/lib/geoip/${file}.mmdb {
+          auto_reload 5m;
+          ${body}
+        }
+      '';
     in
     {
       defaultListenAddresses = [ "10.0.0.1" ];
@@ -71,34 +93,22 @@ in
           '}';
           access_log /var/log/nginx/access.json.log json_access;
 
-          geoip2 /var/lib/geoip/iptoasn-country-ipv4.mmdb {
-            auto_reload 5m;
-            $geoip2_country_code  default=-  source=$remote_addr country iso_code;
-          }
-          geoip2 /var/lib/geoip/iptoasn-asn-ipv4.mmdb {
-            auto_reload 5m;
+          ${geoip2Block "iptoasn-country-ipv4" "$geoip2_country_code  default=-  source=$remote_addr country iso_code;"}
+          ${geoip2Block "iptoasn-asn-ipv4" ''
             $geoip2_asn   default=-  autonomous_system_number;
             $geoip2_asorg default=-  autonomous_system_organization;
-          }
-          geoip2 /var/lib/geoip/iptoasn-country-ipv6.mmdb {
-            auto_reload 5m;
-            $geoip2_country_code  default=-  source=$remote_addr country iso_code;
-          }
-          geoip2 /var/lib/geoip/iptoasn-asn-ipv6.mmdb {
-            auto_reload 5m;
+          ''}
+          ${geoip2Block "iptoasn-country-ipv6" "$geoip2_country_code  default=-  source=$remote_addr country iso_code;"}
+          ${geoip2Block "iptoasn-asn-ipv6" ''
             $geoip2_asn   default=-  autonomous_system_number;
             $geoip2_asorg default=-  autonomous_system_organization;
-          }
+          ''}
           proxy_headers_hash_max_size 1024;
           proxy_headers_hash_bucket_size 128;
       '';
       virtualHosts = {
-        "idimitrov.dev" = tls // {
+        "idimitrov.dev" = mkTlsHost {
           serverAliases = [ "www.idimitrov.dev" ];
-          listenAddresses = [
-            "10.0.0.1"
-            "37.205.13.29"
-          ];
           locations."/" = {
             root = inputs.webshite.packages.${system}.default;
 
@@ -108,11 +118,7 @@ in
             '';
           };
         };
-        "pic.idimitrov.dev" = tls // {
-          listenAddresses = [
-            "10.0.0.1"
-            "37.205.13.29"
-          ];
+        "pic.idimitrov.dev" = mkTlsHost {
           locations."/" = {
             root = "/var/pic";
             extraConfig = ''
@@ -120,11 +126,7 @@ in
             '';
           };
         };
-        "metronome.idimitrov.dev" = tls // {
-          listenAddresses = [
-            "10.0.0.1"
-            "37.205.13.29"
-          ];
+        "metronome.idimitrov.dev" = mkTlsHost {
           locations."/" = {
             root = inputs.metronome.packages.${system}.default;
 
@@ -161,10 +163,10 @@ in
           pkgs.writers.writeNuBin "exec"
             # nu
             ''
-              http get --raw --max-time 69min $"${url}/iptoasn-asn-ipv4.mmdb" | save --raw -f $"${outDir}/iptoasn-asn-ipv4.mmdb"
-              http get --raw --max-time 69min $"${url}/iptoasn-country-ipv4.mmdb" | save --raw -f $"${outDir}/iptoasn-country-ipv4.mmdb"
-              http get --raw --max-time 69min $"${url}/iptoasn-asn-ipv6.mmdb" | save --raw -f $"${outDir}/iptoasn-asn-ipv6.mmdb"
-              http get --raw --max-time 69min $"${url}/iptoasn-country-ipv6.mmdb" | save --raw -f $"${outDir}/iptoasn-country-ipv6.mmdb"
+              ${pkgs.lib.concatMapStringsSep "\n" (
+                file:
+                ''http get --raw --max-time 69min $"${url}/${file}.mmdb" | save --raw -f $"${outDir}/${file}.mmdb"''
+              ) geoipFiles}
             '';
       in
       {
