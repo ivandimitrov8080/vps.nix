@@ -47,6 +47,7 @@
     in
     {
       nixosConfigurations.default = host;
+      nixosConfigurations.vpsfree = host;
 
       checks.${system} = {
         default = integrationTest;
