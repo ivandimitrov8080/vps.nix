@@ -43,7 +43,7 @@
           }
         ];
       };
-      integrationTest = (import ./test { inherit inputs system; }).integrationTest;
+      inherit ((import ./test { inherit inputs system; })) integrationTest;
     in
     {
       nixosConfigurations.default = host;
