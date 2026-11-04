@@ -121,6 +121,28 @@ in
       *.idimitrov.dev 10.0.0.1
     '';
   };
+  systemd.services.git-mirror = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    environment.HOME = config.users.users.git.home;
+    serviceConfig =
+      let
+        exec = pkgs.writers.writeNuBin "git-mirror" ''
+          ls /var/git | where type == dir | each {|d|
+            cd $d.name; git push --force --prune $"git@github.com:ivandimitrov8080/($d.name | path basename).git"
+          }
+        '';
+      in
+      {
+        Type = "oneshot";
+        User = "git";
+        ExecStart = "${exec}/bin/git-mirror";
+      };
+  };
+  systemd.timers.git-mirror = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*:0/10";
+  };
   systemd.tmpfiles.rules =
     let
       subs = [
