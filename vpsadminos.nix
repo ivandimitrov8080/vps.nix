@@ -121,4 +121,40 @@ in
       *.idimitrov.dev 10.0.0.1
     '';
   };
+  systemd.tmpfiles.rules =
+    let
+      subs = [
+        "init"
+        "symbolic-ref"
+        "config"
+        "for-each-ref"
+        "log"
+        "show"
+        "fsck"
+        "gc"
+        "repack"
+        "count-objects"
+        "rev-parse"
+        "ls-tree"
+        "cat-file"
+        "remote"
+        "update-server-info"
+      ];
+      cmds = builtins.listToAttrs (
+        map (s: {
+          name = "git-${s}";
+          value = pkgs.writeShellScript "git-${s}" ''exec ${pkgs.git}/bin/git ${s} "$@"'';
+        }) subs
+      );
+    in
+    [
+      "L+ /var/git/git-shell-commands - - - - ${
+        pkgs.linkFarm "git-shell-commands" (
+          map (n: {
+            name = n;
+            path = cmds.${n};
+          }) (builtins.attrNames cmds)
+        )
+      }"
+    ];
 }
