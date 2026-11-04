@@ -129,7 +129,7 @@ in
       let
         exec = pkgs.writers.writeNuBin "git-mirror" ''
           ls /var/git | where type == dir | each {|d|
-            cd $d.name; git push --force --prune $"git@github.com:ivandimitrov8080/($d.name | path basename).git"
+            cd $d.name; ${pkgs.git}/bin/git push --force --prune $"git@github.com:ivandimitrov8080/($d.name | path basename).git"
           }
         '';
       in
