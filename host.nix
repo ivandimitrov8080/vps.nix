@@ -1,6 +1,3 @@
-# Everything host specific about the VPS: its wireguard identity and the DNS
-# server it hosts. Shared code lives in configuration.nix's
-# meta.{host,wireguard,dns} modules.
 _:
 {
   ...

@@ -1,5 +1,3 @@
-# Public wireguard data: which peers exist. Every host keeps its own copy so it
-# can be deployed without knowing about the other host repositories.
 {
   config,
   ...
