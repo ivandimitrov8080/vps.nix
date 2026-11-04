@@ -125,6 +125,7 @@ in
     let
       subs = [
         "init"
+        "push"
         "symbolic-ref"
         "config"
         "for-each-ref"
