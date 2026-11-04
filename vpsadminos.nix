@@ -65,6 +65,9 @@ in
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICcLkzuCoBEg+wq/H+hkrv6pLJ8J5BejaNJVNnymlnlo ivan@idimitrov.dev"
         ];
         extraGroups = [ "ssh" ];
+        shell = "${pkgs.git}/bin/git-shell";
+        home = "/var/git";
+        createHome = true;
       };
     };
     groups = {
@@ -76,7 +79,7 @@ in
     gitDaemon = {
       enable = true;
       listenAddress = "10.0.0.1";
-      basePath = "/var/git";
+      basePath = config.users.users.git.home;
       exportAll = true;
       options = "--enable=receive-pack";
     };
