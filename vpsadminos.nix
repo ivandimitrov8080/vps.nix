@@ -21,6 +21,7 @@ in
   meta = {
     mail.enable = true;
     bingwp.enable = true;
+    shells.enable = true;
   };
   documentation = {
     enable = false;

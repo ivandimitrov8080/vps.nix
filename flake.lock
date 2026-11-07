@@ -92,17 +92,17 @@
     },
     "configuration": {
       "locked": {
-        "lastModified": 1793738945,
-        "narHash": "sha256-qpRybhMdzOKBBun5409a395qejcYZxI2hJMhJvSkNbE=",
-        "owner": "ivandimitrov8080",
-        "repo": "configuration.nix",
-        "rev": "7f3737b56b37eacceccb4027400e071872f13cfb",
-        "type": "github"
+        "lastModified": 1793822740,
+        "narHash": "sha256-JEokMvdxkKBWG93HrnCb6JPa+SRwmcDzhlIUAi9zwwg=",
+        "ref": "refs/heads/master",
+        "rev": "158a2d74d1a7eaea6ec9c0aae86c92114ab0e040",
+        "revCount": 1497,
+        "type": "git",
+        "url": "git://idimitrov.dev/configuration.nix"
       },
       "original": {
-        "owner": "ivandimitrov8080",
-        "repo": "configuration.nix",
-        "type": "github"
+        "type": "git",
+        "url": "git://idimitrov.dev/configuration.nix"
       }
     },
     "crate2nix": {
@@ -207,11 +207,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1793772322,
-        "narHash": "sha256-d+8KUtXg79GqnoIGnKADaJQ4T8ZKv8mC1o2V193jwEI=",
+        "lastModified": 1794029895,
+        "narHash": "sha256-T+/Tuz8i97NSZ9EFHAkdtCgP9WITlA+kkDgt80uxIwM=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "693a02e24d99e44651298d1612d64d9cd24364b7",
+        "rev": "30bf116937840441438af350c302f1e80cfe8063",
         "type": "github"
       },
       "original": {
@@ -667,11 +667,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1793633738,
-        "narHash": "sha256-tItrb9M8eYA6WhFgmT9tpGKueri3+wRuVA952o/2xSU=",
+        "lastModified": 1793865203,
+        "narHash": "sha256-/cpdPHaySDIyCgZI6EWngiM6jK3YLUNzv1b7lTzy6Bk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7dcdd87373d72e7a2173e4db02e20d3d7f495cfd",
+        "rev": "c56a87d8e41ce69bd2af57eb35dcc117a9dfca33",
         "type": "github"
       },
       "original": {
@@ -683,11 +683,11 @@
     },
     "nixpkgsUnstable": {
       "locked": {
-        "lastModified": 1793540411,
-        "narHash": "sha256-fiPJ88izTVucjeo2EQ3jk4aWmLg03I1D4vxnX2QjEgE=",
+        "lastModified": 1793726008,
+        "narHash": "sha256-jQp1wKvbwWdLBASTXkSi/VYmDJ5AbBi1WvcMt9HWJC8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0bb2eedc20e4739f29e8045034f2828ad7054f8f",
+        "rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
         "type": "github"
       },
       "original": {
@@ -715,18 +715,18 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1793540411,
-        "narHash": "sha256-fiPJ88izTVucjeo2EQ3jk4aWmLg03I1D4vxnX2QjEgE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "0bb2eedc20e4739f29e8045034f2828ad7054f8f",
-        "type": "github"
+        "lastModified": 1793876309,
+        "narHash": "sha256-Wojg9lIH/hDH91iDVH2/EPw8oDSpxjxhXONbU1yf4Zg=",
+        "ref": "nixos-unstable",
+        "rev": "f9a75f41be3a74eab55d3a7679d34ad6cc0da977",
+        "revCount": 1108983,
+        "type": "git",
+        "url": "git://idimitrov.dev/nixpkgs"
       },
       "original": {
-        "owner": "NixOS",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "git",
+        "url": "git://idimitrov.dev/nixpkgs"
       }
     },
     "nixpkgs_4": {
@@ -747,11 +747,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1793633738,
-        "narHash": "sha256-tItrb9M8eYA6WhFgmT9tpGKueri3+wRuVA952o/2xSU=",
+        "lastModified": 1793865203,
+        "narHash": "sha256-/cpdPHaySDIyCgZI6EWngiM6jK3YLUNzv1b7lTzy6Bk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7dcdd87373d72e7a2173e4db02e20d3d7f495cfd",
+        "rev": "c56a87d8e41ce69bd2af57eb35dcc117a9dfca33",
         "type": "github"
       },
       "original": {
@@ -1009,11 +1009,11 @@
         "ruby-lxc": "ruby-lxc"
       },
       "locked": {
-        "lastModified": 1793738450,
-        "narHash": "sha256-MwArttbMI6mzt/YzUwvSbK1Pd4mizjKqO600EnK2fNE=",
+        "lastModified": 1794042358,
+        "narHash": "sha256-mlYvI14seKsOrbVy6np88mL7gjRw6BUT/gP1wN18dVs=",
         "owner": "vpsfreecz",
         "repo": "vpsadminos",
-        "rev": "742eb30cb1a8b6766c85e915d26b0400e38244b1",
+        "rev": "987d3432f2b5ffc8416f103829a58c92832049ca",
         "type": "github"
       },
       "original": {
