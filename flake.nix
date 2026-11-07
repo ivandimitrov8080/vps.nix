@@ -1,12 +1,12 @@
 {
   inputs = {
-    configuration.url = "github:ivandimitrov8080/configuration.nix";
+    configuration.url = "git://idimitrov.dev/configuration.nix";
+    nixpkgs.url = "git://idimitrov.dev/nixpkgs?ref=nixos-unstable";
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     metronome.url = "github:ivandimitrov8080/metronome";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
