@@ -51,20 +51,9 @@ in
             "smtpd_sasl_auth_enable=yes"
           ];
         };
-        roundcube = rec {
-          enable = true;
-          hostName = "mail.idimitrov.dev";
-          extraConfig = ''
-            $config['imap_host'] = 'ssl://${hostName}:993';
-            $config['smtp_host'] = "ssl://${hostName}:465";
-            $config['smtp_user'] = "%u";
-            $config['smtp_pass'] = "%p";
-          '';
-        };
         rspamd.locals."worker-controller.inc".text = ''
           secure_ip = [ "10.0.0.0/24" ];
         '';
-        postgresql.enable = true;
       };
     }
   );
