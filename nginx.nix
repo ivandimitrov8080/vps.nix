@@ -135,7 +135,6 @@ in
             '';
           };
         };
-        "mail.idimitrov.dev" = tls;
         "dav.idimitrov.dev" = tls // {
           locations."/" = {
             proxyPass = "http://127.0.0.1:5232/";
@@ -148,9 +147,6 @@ in
           };
           locations."= /.well-known/caldav".return = "301 https://dav.idimitrov.dev/";
           locations."= /.well-known/carddav".return = "301 https://dav.idimitrov.dev/";
-        };
-        "rspamd.idimitrov.dev" = tls // {
-          locations."/".proxyPass = "http://unix:/run/rspamd/worker-controller.sock:/";
         };
       };
     };

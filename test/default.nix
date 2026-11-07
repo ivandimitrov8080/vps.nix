@@ -389,9 +389,7 @@ in
         outsider.succeed("curl http://idimitrov.dev | grep -o '301'")
         outsider.succeed(f"curl -k https://idimitrov.dev | {homeOk}")
 
-        test_is_subdomain_internal("mail", "Roundcube Webmail")
         test_is_subdomain_internal("dav", "Redirected to /.web")
-        test_is_subdomain_internal("rspamd", "Rspamd Web Interface")
 
         test_is_subdomain_external("metronome", "Metronome")
         test_is_subdomain_external("pic", "Index of /")
