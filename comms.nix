@@ -1,7 +1,7 @@
 { ... }: {
   # NOTE: only used for End to bridge encryption meaning VPS can't see messages if compromised
   nixpkgs.config.permittedInsecurePackages = [
-    "olm"
+    "olm-3.2.16"
   ];
   services = {
     matrix-synapse = {
