@@ -109,12 +109,24 @@ in
       virtualHosts = {
         "idimitrov.dev" = mkTlsHost {
           serverAliases = [ "www.idimitrov.dev" ];
-          locations."/" = {
-            root = inputs.webshite.packages.${system}.default;
+          locations = {
+            "/" = {
+              root = inputs.webshite.packages.${system}.default;
 
-            extraConfig = ''
-              autoindex on;
-              ${serveStatic}
+              extraConfig = ''
+                autoindex on;
+                ${serveStatic}
+              '';
+            };
+            "= /.well-known/matrix/client".extraConfig = ''
+              default_type application/json;
+              add_header Access-Control-Allow-Origin "*" always;
+              return 200 '{"m.homeserver":{"base_url":"https://matrix.idimitrov.dev"}}';
+            '';
+            "= /.well-known/matrix/server".extraConfig = ''
+              default_type application/json;
+              add_header Access-Control-Allow-Origin "*" always;
+              return 200 '{"m.server":"matrix.idimitrov.dev:443"}';
             '';
           };
         };
@@ -133,6 +145,18 @@ in
             extraConfig = ''
               autoindex on;
             '';
+          };
+        };
+        "matrix.idimitrov.dev" = mkTlsHost {
+          listen = [];
+          locations."/_matrix" = {
+            proxyPass = "http://127.0.0.1:8008";
+            proxyWebsockets = true;
+            extraConfig = "client_max_body_size 50M;";
+          };
+          locations."/_synapse/client" = {
+            proxyPass = "http://127.0.0.1:8008";
+            proxyWebsockets = true;
           };
         };
         "dav.idimitrov.dev" = tls // {
