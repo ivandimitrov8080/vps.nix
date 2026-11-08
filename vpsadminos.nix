@@ -113,7 +113,16 @@ in
         };
       };
     };
-    postgresql.enable = true;
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ "matrix-synapse" ];
+      ensureUsers = [
+        {
+          name = "matrix-synapse";
+          ensureDBOwnership = true;
+        }
+      ];
+    };
     dnscrypt-proxy.settings.cloaking_rules = "/etc/dnscrypt-proxy/cloaking_rules.txt";
   };
   environment = {
