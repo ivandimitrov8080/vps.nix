@@ -14,6 +14,7 @@ in
     };
     defaultSopsFile = ./secrets/vpsfree.yaml;
     secrets = {
+      ivand-pass.neededForUsers = true;
       ivan-pass = {
         neededForUsers = true;
         restartUnits = mailServices;
