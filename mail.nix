@@ -27,11 +27,11 @@ in
         ];
         accounts = {
           "ivan@idimitrov.dev" = {
-            hashedPassword = "$2b$05$vJqQ.9lIoTig62sNKmBSVOJK0BQ6jq.dVZZxFEI3.9yQpb23Xgake";
+            passwordFile = "/run/secrets/ivan-pass";
             aliases = [ "admin@idimitrov.dev" ];
           };
           "security@idimitrov.dev" = {
-            hashedPassword = "$2b$05$vJqQ.9lIoTig62sNKmBSVOJK0BQ6jq.dVZZxFEI3.9yQpb23Xgake";
+            passwordFile = "/run/secrets/security-pass";
           };
         };
         x509 = {
