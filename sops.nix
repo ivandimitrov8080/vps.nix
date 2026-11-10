@@ -1,4 +1,12 @@
-{ config, ... }: {
+{ config, ... }:
+let
+  mailServices = [
+    "radicale.service"
+    "dovecot.service"
+    "postfix.service"
+  ];
+in
+{
   sops = {
     gnupg = {
       home = "/root/.gnupg";
@@ -8,19 +16,11 @@
     secrets = {
       ivan-pass = {
         neededForUsers = true;
-        restartUnits = [
-          "radicale.service"
-          "dovecot.service"
-          "postfix.service"
-        ];
+        restartUnits = mailServices;
       };
       security-pass = {
         neededForUsers = true;
-        restartUnits = [
-          "radicale.service"
-          "dovecot.service"
-          "postfix.service"
-        ];
+        restartUnits = mailServices;
       };
       acme = {
         sopsFile = ./secrets/acme.env;
