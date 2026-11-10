@@ -29,7 +29,7 @@ in
           dnsProvider = "cloudflare";
           dnsResolver = "1.1.1.1:53";
           group = "nginx";
-          environmentFile = "/run/secrets/acme.env";
+          environmentFile = "/run/secrets/acme";
         };
       };
     };
