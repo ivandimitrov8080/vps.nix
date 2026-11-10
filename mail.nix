@@ -27,11 +27,11 @@ in
         ];
         accounts = {
           "ivan@idimitrov.dev" = {
-            passwordFile = "/run/secrets/ivan-pass";
+            passwordFile = "/run/secrets-for-users/ivan-pass";
             aliases = [ "admin@idimitrov.dev" ];
           };
           "security@idimitrov.dev" = {
-            passwordFile = "/run/secrets/security-pass";
+            passwordFile = "/run/secrets-for-users/security-pass";
           };
         };
         x509 = {

@@ -8,9 +8,19 @@
     secrets = {
       ivan-pass = {
         neededForUsers = true;
+        restartUnits = [
+          "radicale.service"
+          "dovecot.service"
+          "postfix.service"
+        ];
       };
       security-pass = {
         neededForUsers = true;
+        restartUnits = [
+          "radicale.service"
+          "dovecot.service"
+          "postfix.service"
+        ];
       };
       acme = {
         sopsFile = ./secrets/acme.env;
@@ -28,7 +38,6 @@
         owner = "radicale";
         group = "radicale";
         mode = "0400";
-        restartUnits = [ "radicale.service" ];
       };
     };
   };
