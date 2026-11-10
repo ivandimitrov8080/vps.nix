@@ -40,9 +40,16 @@ in
         25 # smtp auth disabled here
         80 # http
         443 # https
+        7880 # livekit
       ];
       allowedUDPPorts = mkForce [
         51820 # wireguard
+      ];
+      allowedUDPPortRanges = mkForce [
+        {
+          from = 50000;
+          to = 51000;
+        }
       ];
     };
   };

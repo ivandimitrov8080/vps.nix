@@ -148,15 +148,33 @@ in
           };
         };
         "matrix.idimitrov.dev" = mkTlsHost {
-          listen = [];
-          locations."/_matrix" = {
-            proxyPass = "http://127.0.0.1:8008";
-            proxyWebsockets = true;
-            extraConfig = "client_max_body_size 50M;";
+          locations = {
+            "/_matrix" = {
+              proxyPass = "http://127.0.0.1:8008";
+              proxyWebsockets = true;
+              extraConfig = "client_max_body_size 50M;";
+            };
+            "/_synapse/client" = {
+              proxyPass = "http://127.0.0.1:8008";
+              proxyWebsockets = true;
+            };
           };
-          locations."/_synapse/client" = {
-            proxyPass = "http://127.0.0.1:8008";
-            proxyWebsockets = true;
+        };
+        "rtc.idimitrov.dev" = mkTlsHost {
+          locations = {
+            "^~ /livekit/jwt/" = {
+              proxyPass = "http://127.0.0.1:8090/";
+              extraConfig = "proxy_buffering off;";
+            };
+            "^~ /livekit/sfu/" = {
+              proxyPass = "http://127.0.0.1:7880/";
+              proxyWebsockets = true;
+              extraConfig = ''
+                proxy_buffering off;
+                proxy_read_timeout 86400s;
+                proxy_send_timeout 86400s;
+              '';
+            };
           };
         };
         "dav.idimitrov.dev" = tls // {
