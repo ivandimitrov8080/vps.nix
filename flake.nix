@@ -2,17 +2,23 @@
   inputs = {
     configuration.url = "git://idimitrov.dev/configuration.nix";
     nixpkgs.url = "git://idimitrov.dev/nixpkgs?ref=nixos-unstable";
-    emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    metronome.url = "github:ivandimitrov8080/metronome";
+    vpsadminos.url = "github:vpsfreecz/vpsadminos";
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vpsadminos.url = "github:vpsfreecz/vpsadminos";
-    webshite.url = "github:ivandimitrov8080/idimitrov.dev";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    metronome = {
+      url = "github:ivandimitrov8080/metronome";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    webshite = {
+      url = "github:ivandimitrov8080/idimitrov.dev";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{ nixpkgs, ... }:
@@ -28,6 +34,7 @@
           (import ./mail.nix)
           (import ./comms.nix)
           (import ./nginx.nix { inherit inputs; })
+          (import ./sops.nix { inherit inputs; })
           {
             imports = [
               inputs.vpsadminos.nixosConfigurations.containerUnstable
@@ -36,7 +43,6 @@
             nixpkgs = {
               hostPlatform = system;
               overlays = [
-                inputs.emacs-overlay.overlays.default
                 inputs.configuration.overlays.default
               ];
             };

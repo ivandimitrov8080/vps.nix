@@ -19,6 +19,7 @@ let
   vpsadminosModule = import ../vpsadminos.nix { inherit inputs; };
   mail = import ../mail.nix;
   nginx = import ../nginx.nix { inherit inputs; };
+  sops = import ../sops.nix { inherit inputs; };
 
   # --- test network ------------------------------------------------------
   internetVlan = 10;
@@ -255,6 +256,7 @@ in
             vpsadminosModule
             mail
             nginx
+            sops
             (wgModule {
               self = "vpsfree";
               ip = vpsfreeWgIp;
