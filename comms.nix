@@ -32,7 +32,7 @@
       extraConfigFiles = [ "/etc/matrix/synapse-secrets.yaml" ];
     };
     livekit = {
-      enable = true;
+      enable = false;
       keyFile = "/etc/matrix/livekit-keys.yaml";
       settings = {
         room.auto_create = false;
@@ -54,7 +54,7 @@
       };
     };
     lk-jwt-service = {
-      enable = true;
+      enable = false;
       port = 8090;
       keyFile = "/etc/matrix/livekit-keys.yaml";
       livekitUrl = "wss://rtc.idimitrov.dev/livekit/sfu";

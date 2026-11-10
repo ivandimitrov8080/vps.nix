@@ -32,6 +32,7 @@
           (import ./host.nix { inherit inputs; })
           (import ./vpsadminos.nix { inherit inputs; })
           (import ./mail.nix)
+          (import ./comms.nix)
           (import ./nginx.nix { inherit inputs; })
           (import ./sops.nix { inherit inputs; })
           {
