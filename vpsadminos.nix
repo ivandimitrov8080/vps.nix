@@ -59,7 +59,7 @@ in
     users = {
       ivand = lib.mkForce {
         isNormalUser = true;
-        hashedPassword = "$2b$05$hPrPcewxj4qjLCRQpKBAu.FKvKZdIVlnyn4uYsWE8lc21Jhvc9jWG";
+        hashedPasswordFile = config.sops.secrets.ivand-pass.path;
         extraGroups = [
           "wheel"
           "adm"
