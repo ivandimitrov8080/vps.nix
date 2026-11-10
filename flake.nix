@@ -29,15 +29,11 @@
         specialArgs = { inherit inputs; };
         modules = [
           inputs.configuration.nixosModules.default
-          (import ./host.nix { inherit inputs; })
-          (import ./vpsadminos.nix { inherit inputs; })
-          (import ./mail.nix)
-          (import ./comms.nix)
-          (import ./nginx.nix { inherit inputs; })
-          (import ./sops.nix { inherit inputs; })
           {
             imports = [
+              inputs.sops-nix.nixosModules.sops
               inputs.vpsadminos.nixosConfigurations.containerUnstable
+              ./host.nix
             ];
             _module.args.system = system;
             nixpkgs = {

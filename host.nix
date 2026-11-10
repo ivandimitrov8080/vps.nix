@@ -1,9 +1,15 @@
-_:
 {
   ...
 }:
 {
-  imports = [ ./peers.nix ];
+  imports = [
+    ./peers.nix
+    ./sops.nix
+    ./nginx.nix
+    ./comms.nix
+    ./mail.nix
+    ./vpsadminos.nix
+  ];
 
   meta = {
     host = {

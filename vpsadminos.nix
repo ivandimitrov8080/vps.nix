@@ -1,8 +1,8 @@
-{ inputs }:
 {
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 let
@@ -103,20 +103,11 @@ in
         server = {
           hosts = [ "127.0.0.1:5232" ];
         };
-        auth =
-          let
-            inherit (lib) concatStrings flip mapAttrsToList;
-            htpasswd = pkgs.writeText "radicale.users" (
-              concatStrings (
-                flip mapAttrsToList config.mailserver.accounts (mail: user: mail + ":" + user.hashedPassword + "\n")
-              )
-            );
-          in
-          {
-            type = "htpasswd";
-            htpasswd_filename = "${htpasswd}";
-            htpasswd_encryption = "bcrypt";
-          };
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = config.sops.templates."radicale.users".path;
+          htpasswd_encryption = "plain";
+        };
         storage = {
           filesystem_folder = "/var/lib/radicale/collections";
         };
