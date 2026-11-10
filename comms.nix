@@ -35,12 +35,21 @@
       enable = true;
       keyFile = "/etc/matrix/livekit-keys.yaml";
       settings = {
-        port = 7880;
+        room.auto_create = false;
+        turn = {
+          enabled = true;
+          domain = "rtc.idimitrov.dev";
+          udp_port = 443;
+          tls_port = 5349;
+          cert_file = "/var/lib/acme/idimitrov.dev/fullchain.pem";
+          key_file = "/var/lib/acme/idimitrov.dev/key.pem";
+        };
         rtc = {
+          node_ip = "37.205.13.29";
+          tcp_port = 7881;
           port_range_start = 50000;
           port_range_end = 51000;
-          use_external_ip = true;
-          room.auto_create = false;
+          use_external_ip = false;
         };
       };
     };
