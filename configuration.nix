@@ -1,4 +1,5 @@
-{ inputs, ... }: {
+{ inputs, ... }:
+{
   imports = [
     inputs.configuration.nixosModules.default
     inputs.sops-nix.nixosModules.sops

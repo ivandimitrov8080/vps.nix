@@ -27,11 +27,8 @@
       host = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          {
-            imports = [
-              ./configuration.nix
-            ];
-          }
+          ./configuration.nix
+          ./nixpkgs.nix
         ];
       };
       inherit (import ./test { inherit inputs; }) integrationTest;
