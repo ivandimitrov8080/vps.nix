@@ -24,35 +24,22 @@
     inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
-
       host = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          inputs.configuration.nixosModules.default
           {
             imports = [
-              inputs.sops-nix.nixosModules.sops
-              inputs.vpsadminos.nixosConfigurations.containerUnstable
-              ./host.nix
+              ./configuration.nix
             ];
-            _module.args.system = system;
-            nixpkgs = {
-              hostPlatform = system;
-              overlays = [
-                inputs.configuration.overlays.default
-              ];
-            };
           }
         ];
       };
-      inherit ((import ./test { inherit inputs system; })) integrationTest;
+      inherit (import ./test { inherit inputs; }) integrationTest;
     in
     {
       nixosConfigurations.default = host;
       nixosConfigurations.vpsfree = host;
 
-      checks.${system} = {
-        default = integrationTest;
-      };
+      checks.${system}.default = integrationTest;
     };
 }

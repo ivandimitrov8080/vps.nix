@@ -16,10 +16,10 @@ let
   inherit (lib) mkForce optional;
 
   configMod = inputs.configuration.nixosModules.default;
-  vpsadminosModule = import ../vpsadminos.nix { inherit inputs; };
+  vpsadminosModule = import ../vpsadminos.nix;
   mail = import ../mail.nix;
-  nginx = import ../nginx.nix { inherit inputs; };
-  sops = import ../sops.nix { inherit inputs; };
+  nginx = import ../nginx.nix;
+  sops = import ../sops.nix;
 
   # --- test network ------------------------------------------------------
   internetVlan = 10;
