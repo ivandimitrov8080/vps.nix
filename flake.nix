@@ -19,6 +19,10 @@
       url = "github:ivandimitrov8080/idimitrov.dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{ nixpkgs, ... }:
@@ -31,12 +35,12 @@
           ./nixpkgs.nix
         ];
       };
-      inherit (import ./test { inherit inputs; }) integrationTest;
     in
     {
       nixosConfigurations.default = host;
       nixosConfigurations.vpsfree = host;
 
-      checks.${system}.default = integrationTest;
+      checks.${system}.default = (import ./test { inherit inputs; });
+      devShells.${system}.default = import ./devshell.nix { inherit inputs system; };
     };
 }

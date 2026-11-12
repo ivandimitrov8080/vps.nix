@@ -5,8 +5,8 @@
 let
   pkgs = import inputs.nixpkgs { inherit system; };
 in
-{
-  integrationTest = pkgs.testers.runNixOSTest {
+pkgs.testers.runNixOSTest (
+  { config, ... }: {
     defaults = ./test-module.nix;
     name = "integration-test";
     node = {
@@ -29,7 +29,7 @@ in
 
       outsider = { ... }: { };
     };
-
     testScript = builtins.readFile ./test-script.py;
-  };
-}
+    passthru.driverConfigurationFile = config.driverConfigurationFile;
+  }
+)
