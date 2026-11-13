@@ -20,4 +20,5 @@
     inetutils
     nmap
   ];
+  networking.useHostResolvConf = false;
 }
