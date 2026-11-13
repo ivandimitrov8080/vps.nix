@@ -12,8 +12,10 @@ pkgs.testers.runNixOSTest {
     pkgsReadOnly = false;
     specialArgs = { inherit inputs; };
   };
-  containers = {
+  nodes = {
     router = _: { };
+
+    dns = { ... }: { };
 
     vpsfree = _: {
       imports = [
@@ -22,8 +24,6 @@ pkgs.testers.runNixOSTest {
     };
 
     spoke = { ... }: { };
-
-    dns = { ... }: { };
 
     outsider = { ... }: { };
   };
