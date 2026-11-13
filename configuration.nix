@@ -3,7 +3,6 @@
   imports = [
     inputs.configuration.nixosModules.default
     inputs.sops-nix.nixosModules.sops
-    inputs.vpsadminos.nixosConfigurations.containerUnstable
 
     ./mail.nix
     ./host.nix

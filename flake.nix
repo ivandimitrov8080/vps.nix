@@ -31,8 +31,8 @@
       host = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
+          inputs.vpsadminos.nixosConfigurations.containerUnstable
           ./configuration.nix
-          ./nixpkgs.nix
         ];
       };
     in
