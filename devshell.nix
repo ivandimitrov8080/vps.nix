@@ -36,7 +36,7 @@ inputs.devenv.lib.mkShell {
         files = {
           "__builtins__.pyi".text = builtins.readFile (
             pkgs.runCommand "__builtins__.pyi" { nativeBuildInputs = config.packages; } ''
-              export NIXOS_TEST_DRIVER_CONFIG=${testDriver.driverConfigurationFile}
+              export NIXOS_TEST_DRIVER_CONFIG=${testDriver.config.driverConfigurationFile}
               ${python}/bin/python ${./test/builtins.py} > $out
             ''
           );
