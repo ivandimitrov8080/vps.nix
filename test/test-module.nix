@@ -1,4 +1,4 @@
-{... }: {
+{ pkgs, ... }: {
   users = {
     users.test = {
       isNormalUser = true;
@@ -12,4 +12,12 @@
     };
     groups.ssh = { };
   };
+  environment.systemPackages = with pkgs; [
+    swaks
+    wireguard-tools
+    dig
+    curl
+    inetutils
+    nmap
+  ];
 }

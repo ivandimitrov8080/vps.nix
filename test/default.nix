@@ -18,7 +18,6 @@ pkgs.testers.runNixOSTest {
     vpsfree = _: {
       imports = [
         ../configuration.nix
-        ./test-module.nix
       ];
     };
 
