@@ -1,5 +1,5 @@
 { inputs, pkgs, ... }: {
-  imports = [ inputs.configuration.overlays.default ];
+  imports = [ inputs.configuration.nixosModules.default ];
   users = {
     users.test = {
       isNormalUser = true;
