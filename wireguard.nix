@@ -4,7 +4,7 @@
     firewall.filterForward = true;
     nat = {
       enable = true;
-      externalInterface = "venet";
+      externalInterface = "venet0";
       internalInterfaces = [ "wg0" ];
     };
     wireguard = {
