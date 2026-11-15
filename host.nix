@@ -3,7 +3,6 @@
 }:
 {
   imports = [
-    ./peers.nix
     ./sops.nix
     ./nginx.nix
     ./comms.nix
@@ -15,12 +14,6 @@
     host = {
       stateVersion = "26.05";
       publicAddress = "37.205.13.29";
-    };
-
-    wireguard = {
-      enable = true;
-      self = "vpsfree";
-      address = "10.0.0.1/24";
     };
 
     dns = {

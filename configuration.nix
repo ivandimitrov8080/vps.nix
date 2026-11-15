@@ -9,7 +9,6 @@
     ./sops.nix
     ./comms.nix
     ./nginx.nix
-    ./peers.nix
     ./vpsadminos.nix
   ];
   nixpkgs = {

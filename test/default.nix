@@ -28,7 +28,6 @@ pkgs.testers.runNixOSTest {
       ];
       environment.etc."systemd/network/wg0.key".source = ./vpsfree.priv;
       services.nginx.enable = pkgs.lib.mkForce false;
-      meta.wireguard.enable = pkgs.lib.mkForce false;
       networking = {
         nat = {
           enable = true;
@@ -56,57 +55,24 @@ pkgs.testers.runNixOSTest {
 
     spoke = { ... }: {
       environment.etc."systemd/network/wg0.key".source = ./spoke.priv;
-      networking = {
-        nftables = {
-          enable = true;
-          ruleset = ''
-            table inet killswitch {
-              chain output {
-                type filter hook output priority 0; policy drop;
-                oifname "lo" accept
-                oifname "wg0" accept
-                meta mark 0x1b39 accept
-                ct state established,related accept
-              }
-            }
-          '';
-        };
-        wireguard = {
-          enable = true;
-          useNetworkd = true;
-          interfaces.wg0 = {
-            ips = [ "10.0.0.2/32" ];
-            privateKeyFile = "/etc/systemd/network/wg0.key";
-            table = "1000";
-            fwMark = "0x1b39";
-            peers = [
-              {
-                name = "vpsfree";
-                publicKey = builtins.readFile ./vpsfree.pub;
-                allowedIPs = [
-                  "0.0.0.0/0"
-                  "::/0"
-                ];
-                endpoint = "37.205.13.29:51820";
-                persistentKeepalive = 7;
-              }
+      custom.wireguard = {
+        enable = true;
+        killswitch = true;
+        ips = [ "10.0.0.2/32" ];
+        privateKeyFile = "/etc/systemd/network/wg0.key";
+        peers = [
+          {
+            name = "vpsfree";
+            publicKey = builtins.readFile ./vpsfree.pub;
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
             ];
-          };
-        };
+            endpoint = "37.205.13.29:51820";
+            persistentKeepalive = 7;
+          }
+        ];
       };
-      systemd.network.networks."40-wg0".routingPolicyRules = [
-        {
-          FirewallMark = 6969;
-          InvertRule = true;
-          Table = 1000;
-          Priority = 10;
-        }
-        {
-          SuppressPrefixLength = 0;
-          Table = "main";
-          Priority = 20;
-        }
-      ];
     };
 
     outsider = { ... }: {

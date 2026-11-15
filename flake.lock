@@ -92,11 +92,11 @@
     },
     "configuration": {
       "locked": {
-        "lastModified": 1794066354,
-        "narHash": "sha256-ey+qngib8TwhNFCf43OQMFpIxamYztkllFJ+d+Oth50=",
+        "lastModified": 1794762869,
+        "narHash": "sha256-Hj4aHksAZvXjXzAAwwWknCwuaJ0L2+mNHhCJJkcBeVo=",
         "ref": "refs/heads/master",
-        "rev": "c12c6894e95be14a871bd5a683dd2506738d66c1",
-        "revCount": 1498,
+        "rev": "1bce539a8ab8295a69add4aa0990732e41946b5b",
+        "revCount": 1503,
         "type": "git",
         "url": "git://idimitrov.dev/configuration.nix"
       },
