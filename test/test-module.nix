@@ -4,7 +4,8 @@
     {
       address = "37.205.13.29";
       prefixLength = 32;
-      via = "192.168.1.4";
+      # Change this when adding new machines cuz ip changes
+      via = "192.168.1.5";
       options.scope = "global";
     }
   ];
