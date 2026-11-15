@@ -20,6 +20,8 @@
     curl
     inetutils
     nmap
+    ripgrep
   ];
   networking.useHostResolvConf = false;
+  networking.enableIPv6 = false;
 }
