@@ -16,7 +16,7 @@ pkgs.testers.runNixOSTest {
 
     dns = { ... }: { };
 
-    vpsfree = _: {
+    vpsfree = { lib, ... }: {
       imports = [
         ../configuration.nix
       ];
@@ -29,19 +29,10 @@ pkgs.testers.runNixOSTest {
       environment.etc."systemd/network/wg0.key".source = ./vpsfree.priv;
       services.nginx.enable = pkgs.lib.mkForce false;
       networking = {
-        nat = {
-          enable = true;
-          externalInterface = "eth1";
-          internalInterfaces = [ "wg0" ];
-        };
+        nat.externalInterface = lib.mkForce "eth1";
         wireguard = {
-          enable = true;
-          useNetworkd = true;
           interfaces.wg0 = {
-            ips = [ "10.0.0.1/32" ];
-            listenPort = 51820;
-            privateKeyFile = "/etc/systemd/network/wg0.key";
-            peers = [
+            peers = lib.mkForce [
               {
                 name = "spoke";
                 publicKey = builtins.readFile ./spoke.pub;
