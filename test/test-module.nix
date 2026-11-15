@@ -1,5 +1,13 @@
 { inputs, pkgs, ... }: {
   imports = [ inputs.configuration.nixosModules.default ];
+  networking.interfaces.eth1.ipv4.routes = [
+    {
+      address = "37.205.13.29";
+      prefixLength = 32;
+      via = "192.168.1.4";
+      options.scope = "global";
+    }
+  ];
   users = {
     users.test = {
       isNormalUser = true;

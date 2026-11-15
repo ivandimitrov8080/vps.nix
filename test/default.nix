@@ -20,6 +20,12 @@ pkgs.testers.runNixOSTest {
       imports = [
         ../configuration.nix
       ];
+      networking.interfaces.eth1.ipv4.addresses = [
+        {
+          address = "37.205.13.29";
+          prefixLength = 32;
+        }
+      ];
       environment.etc."systemd/network/wg0.key".source = ./vpsfree.priv;
       services.nginx.enable = pkgs.lib.mkForce false;
       meta.wireguard.enable = pkgs.lib.mkForce false;
@@ -62,7 +68,7 @@ pkgs.testers.runNixOSTest {
                 name = "vpsfree";
                 publicKey = builtins.readFile ./vpsfree.pub;
                 allowedIPs = [ "10.0.0.1/32" ];
-                endpoint = "192.168.1.4:51820";
+                endpoint = "37.205.13.29:51820";
                 persistentKeepalive = 7;
               }
             ];
