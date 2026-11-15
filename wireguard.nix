@@ -1,5 +1,7 @@
 {
   networking = {
+    enableIPv6 = false;
+    firewall.filterForward = true;
     nat = {
       enable = true;
       externalInterface = "venet";
