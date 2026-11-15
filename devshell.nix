@@ -27,11 +27,12 @@ inputs.devenv.lib.mkShell {
             package = python;
           };
         };
-        packages = [
+        packages = with pkgs; [
           (pkgs.nixos-test-driver.override {
             enableNspawn = true;
           })
           testDriver
+          sops
         ];
         files = {
           "__builtins__.pyi".text = builtins.readFile (
