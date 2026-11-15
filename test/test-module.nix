@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ inputs, pkgs, ... }: {
+  imports = [ inputs.configuration.overlays.default ];
   users = {
     users.test = {
       isNormalUser = true;

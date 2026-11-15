@@ -23,7 +23,16 @@ pkgs.testers.runNixOSTest {
       ];
     };
 
-    spoke = { ... }: { };
+    spoke = { ... }: {
+      meta.wireguard.peers = {
+        vpsfree = {
+          ip = "10.0.0.1";
+          publicKey = builtins.readFile ./vpsfree.pub;
+          endpoint = "37.205.13.29:51820";
+          persistentKeepalive = 7;
+        };
+      };
+    };
 
     outsider = { ... }: { };
   };
