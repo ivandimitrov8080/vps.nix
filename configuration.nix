@@ -10,6 +10,7 @@
     ./comms.nix
     ./nginx.nix
     ./vpsadminos.nix
+    ./wireguard.nix
   ];
   nixpkgs = {
     hostPlatform = "x86_64-linux";
