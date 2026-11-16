@@ -104,7 +104,7 @@ in
           hosts = [ "127.0.0.1:5232" ];
         };
         auth = {
-          type = "plain";
+          type = "htpasswd";
           htpasswd_filename = config.sops.templates."radicale.users".path;
           htpasswd_encryption = "plain";
         };
