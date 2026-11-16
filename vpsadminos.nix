@@ -44,7 +44,7 @@ in
         7881 # livekit rtc
       ];
       allowedUDPPorts = mkForce [
-        443 # livekit rtc
+        5349 # livekit turn
         51820 # wireguard
       ];
       allowedUDPPortRanges = mkForce [
