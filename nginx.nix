@@ -11,12 +11,6 @@ let
     "10.0.0.1"
     publicIp
   ];
-  geoipFiles = [
-    "iptoasn-asn-ipv4"
-    "iptoasn-country-ipv4"
-    "iptoasn-asn-ipv6"
-    "iptoasn-country-ipv6"
-  ];
 in
 {
   security = {
@@ -56,16 +50,9 @@ in
           ]
         )
       } $uri $uri/ =404;";
-      geoip2Block = file: body: ''
-        geoip2 /var/lib/geoip/${file}.mmdb {
-          auto_reload 5m;
-          ${body}
-        }
-      '';
     in
     {
       defaultListenAddresses = [ "10.0.0.1" ];
-      additionalModules = with pkgs.nginxModules; [ geoip2 ];
       commonHttpConfig = ''
         log_format json_access escape=json
           '{'
@@ -86,23 +73,10 @@ in
             '"user_agent":"$http_user_agent",'
             '"upstream_addr":"$upstream_addr",'
             '"upstream_status":"$upstream_status",'
-            '"upstream_response_time":"$upstream_response_time",'
-            '"asn":"$geoip2_asn",'
-            '"as_org":"$geoip2_asorg",'
-            '"geoip_country_code":"$geoip2_country_code"'
+            '"upstream_response_time":"$upstream_response_time"'
           '}';
           access_log /var/log/nginx/access.json.log json_access;
 
-          ${geoip2Block "iptoasn-country-ipv4" "$geoip2_country_code  default=-  source=$remote_addr country iso_code;"}
-          ${geoip2Block "iptoasn-asn-ipv4" ''
-            $geoip2_asn   default=-  autonomous_system_number;
-            $geoip2_asorg default=-  autonomous_system_organization;
-          ''}
-          ${geoip2Block "iptoasn-country-ipv6" "$geoip2_country_code  default=-  source=$remote_addr country iso_code;"}
-          ${geoip2Block "iptoasn-asn-ipv6" ''
-            $geoip2_asn   default=-  autonomous_system_number;
-            $geoip2_asorg default=-  autonomous_system_organization;
-          ''}
           proxy_headers_hash_max_size 1024;
           proxy_headers_hash_bucket_size 128;
       '';
@@ -192,39 +166,4 @@ in
         };
       };
     };
-  systemd = {
-    services.update-geoip =
-      let
-        outDir = "/var/lib/geoip";
-        url = "https://github.com/sapics/ip-location-db/releases/download/latest";
-        exec =
-          pkgs.writers.writeNuBin "exec"
-            # nu
-            ''
-              ${pkgs.lib.concatMapStringsSep "\n" (
-                file:
-                ''http get --raw --max-time 69min $"${url}/${file}.mmdb" | save --raw -f $"${outDir}/${file}.mmdb"''
-              ) geoipFiles}
-            '';
-      in
-      {
-        description = "Update GEOIP database from https://github.com/sapics/ip-location-db";
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ReadWritePaths = [ outDir ];
-          ExecStart = "${exec}/bin/exec";
-        };
-      };
-    timers = {
-      update-geoip = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*-*-* 10:00:00";
-          Persistent = true;
-        };
-      };
-    };
-  };
 }

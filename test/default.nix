@@ -27,7 +27,6 @@ pkgs.testers.runNixOSTest {
         }
       ];
       environment.etc."systemd/network/wg0.key".source = ./vpsfree.priv;
-      services.nginx.enable = pkgs.lib.mkForce false;
       networking = {
         nat.externalInterface = lib.mkForce "eth1";
         wireguard = {
