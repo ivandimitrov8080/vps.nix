@@ -33,7 +33,6 @@ inputs.devenv.lib.mkShell {
           })
           testDriver
           sops
-          sequoia-chameleon-gnupg
         ];
         files = {
           "__builtins__.pyi".text = builtins.readFile (
@@ -45,11 +44,11 @@ inputs.devenv.lib.mkShell {
           "test/vpsfree.yaml" = {
             copyMode = "copy";
             text = builtins.readFile (
-              pkgs.runCommand "vpsfree-test.yaml" { nativeBuildInputs = config.packages; } ''
+              pkgs.runCommand "vpsfree-test.yaml" { nativeBuildInputs = config.packages ++ [ pkgs.gnupg ]; } ''
                 export GNUPGHOME=$(mktemp -d)
                 export HOME=$PWD
                 gpg --batch --quiet --import ${./test/gnupg.asc}
-                gpg --batch --list-secret-keys
+                echo ultimate | gpg --batch --yes --command-fd 0 --edit-key 'E915 7A97 EAD3 3FF4 161D  E642 B1F8 A6AB C0CF 065F' trust
                 ${python}/bin/python ${./dev/sops-test.py} ${./secrets/vpsfree.yaml} ${./test/.sops.yaml} > $out
               ''
             );
