@@ -20,3 +20,4 @@ print(vpsfree.succeed("ls -al /run/secrets-for-users"))
 vpsfree.wait_for_unit("nginx.service")
 
 vpsfree.wait_for_unit("matrix-synapse.service")
+vpsfree.wait_for_unit("mautrix-telegram.service")
