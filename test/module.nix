@@ -2,8 +2,12 @@
   inputs,
   pkgs,
   config,
+  lib,
   ...
 }:
+let
+  inherit (lib) mkBefore;
+in
 {
   imports = [
     inputs.configuration.nixosModules.default
@@ -51,5 +55,5 @@
       ${pkgs.gnupg}/bin/gpg --batch --homedir ${config.sops.gnupg.home} --import ${./gnupg.asc}
     '';
   };
-  system.activationScripts.setupSecretsForUsers.deps = pkgs.lib.mkBefore [ "import-test-gpg-key" ];
+  system.activationScripts.setupSecretsForUsers.deps = mkBefore [ "import-test-gpg-key" ];
 }
