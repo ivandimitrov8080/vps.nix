@@ -6,7 +6,7 @@ let
   pkgs = import inputs.nixpkgs { inherit system; };
 in
 pkgs.testers.runNixOSTest {
-  defaults = ./test-module.nix;
+  defaults = ./module.nix;
   name = "integration-test";
   node = {
     pkgsReadOnly = false;
@@ -84,5 +84,5 @@ pkgs.testers.runNixOSTest {
       };
     };
   };
-  testScript = builtins.readFile ./test-script.py;
+  testScript = builtins.readFile ./script.py;
 }

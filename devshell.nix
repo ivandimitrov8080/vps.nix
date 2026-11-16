@@ -33,14 +33,27 @@ inputs.devenv.lib.mkShell {
           })
           testDriver
           sops
+          gnupg
         ];
         files = {
           "__builtins__.pyi".text = builtins.readFile (
             pkgs.runCommand "__builtins__.pyi" { nativeBuildInputs = config.packages; } ''
               export NIXOS_TEST_DRIVER_CONFIG=${testDriver.config.driverConfigurationFile}
-              ${python}/bin/python ${./test/builtins.py} > $out
+              ${python}/bin/python ${./dev/builtins.py} > $out
             ''
           );
+          "test/vpsfree.yaml" = {
+            copyMode = "copy";
+            text = builtins.readFile (
+              pkgs.runCommand "vpsfree-test.yaml" { nativeBuildInputs = config.packages; } ''
+                export GNUPGHOME=$(mktemp -d)
+                export HOME=$PWD
+                gpg --batch --quiet --import ${./test/gnupg.asc}
+                gpg --batch --list-secret-keys
+                ${python}/bin/python ${./dev/sops-test.py} ${./secrets/vpsfree.yaml} ${./test/.sops.yaml} > $out
+              ''
+            );
+          };
         };
       }
     )

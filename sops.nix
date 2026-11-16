@@ -12,6 +12,7 @@ in
       home = "/root/.gnupg";
       sshKeyPaths = [ ];
     };
+    age.sshKeyPaths = [ ];
     defaultSopsFile = ./secrets/vpsfree.yaml;
     secrets = {
       ivand-pass.neededForUsers = true;
@@ -23,13 +24,7 @@ in
         neededForUsers = true;
         restartUnits = mailServices;
       };
-      acme = {
-        sopsFile = ./secrets/acme.env;
-        format = "dotenv";
-        owner = "acme";
-        group = "root";
-        mode = "0400";
-      };
+      cloudflare-dns-api-token = { };
     };
     templates = {
       "radicale.users" = {
@@ -38,6 +33,14 @@ in
         '';
         owner = "radicale";
         group = "radicale";
+        mode = "0400";
+      };
+      "acme.env" = {
+        content = ''
+          CLOUDFLARE_DNS_API_TOKEN=${config.sops.placeholder.cloudflare-dns-api-token}
+        '';
+        owner = "acme";
+        group = "root";
         mode = "0400";
       };
     };

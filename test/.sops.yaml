@@ -1,0 +1,8 @@
+keys:
+  - &test        E9157A97EAD33FF4161DE642B1F8A6ABC0CF065F
+
+creation_rules:
+  - path_regex: \.(yaml|json|env|ini)$
+    key_groups:
+      - pgp:
+          - *test
