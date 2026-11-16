@@ -17,11 +17,9 @@ in
     secrets = {
       ivand-pass.neededForUsers = true;
       ivan-pass = {
-        neededForUsers = true;
         restartUnits = mailServices;
       };
       security-pass = {
-        neededForUsers = true;
         restartUnits = mailServices;
       };
       cloudflare-dns-api-token = { };
