@@ -151,6 +151,10 @@ in
             };
           };
         };
+        "element.idimitrov.dev" = mkTlsHost {
+          root = pkgs.element-web;
+          locations."/".extraConfig = "try_files $uri $uri/ /index.html;";
+        };
         "dav.idimitrov.dev" = tls // {
           locations."/" = {
             proxyPass = "http://127.0.0.1:5232/";
