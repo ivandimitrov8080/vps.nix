@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) mkBefore;
+  inherit (lib) mkBefore mkForce;
 in
 {
   imports = [
@@ -16,6 +16,7 @@ in
   ];
   sops.defaultSopsFile = pkgs.lib.mkForce ./vpsfree.yaml;
   security.pki.certificateFiles = [ ./cert/cert.pem ];
+  security.acme = mkForce { };
   networking.interfaces.eth1.ipv4.routes = [
     {
       address = "37.205.13.29";
