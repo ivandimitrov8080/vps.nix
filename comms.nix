@@ -39,8 +39,6 @@
         turn = {
           enabled = true;
           domain = "rtc.idimitrov.dev";
-          udp_port = 443;
-          tls_port = 5349;
           cert_file = "/run/credentials/livekit.service/turn.crt";
           key_file = "/run/credentials/livekit.service/turn.key";
         };
