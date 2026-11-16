@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, ... }: {
   # NOTE: only used for End to bridge encryption meaning VPS can't see messages if compromised
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
@@ -29,7 +29,7 @@
           }
         ];
       };
-      extraConfigFiles = [ "/etc/matrix/synapse-secrets.yaml" ];
+      extraConfigFiles = [ config.sops.templates."synapse-reg.yaml".path ];
     };
     livekit = {
       enable = false;
@@ -61,7 +61,7 @@
     };
     mautrix-telegram = {
       enable = true;
-      environmentFile = "/etc/matrix/mautrix-telegram.env";
+      environmentFile = config.sops.templates."mautrix-telegram.env".path;
       settings = {
         homeserver = {
           address = "http://localhost:8008";

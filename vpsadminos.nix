@@ -116,6 +116,17 @@ in
     postgresql = {
       enable = true;
       ensureDatabases = [ "matrix-synapse" ];
+      initdbArgs = [
+        "--encoding=UTF8"
+        "--locale=C"
+        "--data-checksums"
+      ];
+      settings = {
+        lc_messages = "C";
+        lc_monetary = "C";
+        lc_numeric = "C";
+        lc_time = "C";
+      };
       ensureUsers = [
         {
           name = "matrix-synapse";
