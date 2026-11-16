@@ -58,4 +58,5 @@ in
     '';
   };
   system.activationScripts.setupSecretsForUsers.deps = mkBefore [ "import-test-gpg-key" ];
+  services.dnscrypt-proxy.settings.offline_mode = true;
 }

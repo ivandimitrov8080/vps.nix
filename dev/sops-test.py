@@ -14,7 +14,7 @@ with open(src, "r") as f:
     kv = safe_load(f)
     kv.pop("sops", None)
     for k in kv:
-        kv[k] = "test"
+        kv[k] = "test" * 8
     res = encrypt(dump(kv))
     if res.returncode != 0:
         print(res)

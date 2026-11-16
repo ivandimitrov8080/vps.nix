@@ -32,8 +32,8 @@
       extraConfigFiles = [ config.sops.templates."synapse-reg.yaml".path ];
     };
     livekit = {
-      enable = false;
-      keyFile = "/etc/matrix/livekit-keys.yaml";
+      enable = true;
+      keyFile = config.sops.templates."livekit.yaml".path;
       settings = {
         room.auto_create = false;
         turn = {
@@ -41,8 +41,8 @@
           domain = "rtc.idimitrov.dev";
           udp_port = 443;
           tls_port = 5349;
-          cert_file = "/var/lib/acme/idimitrov.dev/fullchain.pem";
-          key_file = "/var/lib/acme/idimitrov.dev/key.pem";
+          cert_file = "/run/credentials/livekit.service/turn.crt";
+          key_file = "/run/credentials/livekit.service/turn.key";
         };
         rtc = {
           node_ip = "37.205.13.29";
@@ -54,9 +54,9 @@
       };
     };
     lk-jwt-service = {
-      enable = false;
+      enable = true;
       port = 8090;
-      keyFile = "/etc/matrix/livekit-keys.yaml";
+      keyFile = config.sops.templates."livekit.yaml".path;
       livekitUrl = "wss://rtc.idimitrov.dev/livekit/sfu";
     };
     mautrix-telegram = {
@@ -73,5 +73,9 @@
       };
     };
   };
+  systemd.services.livekit.serviceConfig.LoadCredential = [
+    "turn.crt:/var/lib/acme/idimitrov.dev/fullchain.pem"
+    "turn.key:/var/lib/acme/idimitrov.dev/key.pem"
+  ];
   systemd.services.lk-jwt-service.environment.LIVEKIT_FULL_ACCESS_HOMESERVERS = "idimitrov.dev";
 }

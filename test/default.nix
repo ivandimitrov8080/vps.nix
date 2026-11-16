@@ -47,6 +47,7 @@ pkgs.testers.runNixOSTest {
           mkdir -p $out
           cp ${./cert/key.pem} $out/key.pem
           cp ${./cert/cert.pem} $out/fullchain.pem
+          chown -R acme:acme /var/lib/acme
         '';
       };
     };
