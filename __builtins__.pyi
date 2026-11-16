@@ -1,1 +1,1 @@
-/nix/store/r2hnf56s5b3yavspn5nsy4827icwk0ny-__builtins__.pyi
+/nix/store/asj3gmiw8xwqbkhaq03p90pcz3s7h6xx-__builtins__.pyi
