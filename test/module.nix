@@ -48,7 +48,7 @@
   system.activationScripts.import-test-gpg-key = {
     deps = [ "specialfs" ];
     text = ''
-      ${pkgs.gnupg}/bin/gpg --batch --homedir ${config.sops.gnupg.home} --import ${./gnupg.asc}
+      ${pkgs.sequoia-chameleon-gnupg}/bin/gpg --batch --homedir ${config.sops.gnupg.home} --import ${./gnupg.asc}
     '';
   };
   system.activationScripts.setupSecretsForUsers.deps = pkgs.lib.mkBefore [ "import-test-gpg-key" ];

@@ -33,7 +33,7 @@ inputs.devenv.lib.mkShell {
           })
           testDriver
           sops
-          gnupg
+          sequoia-chameleon-gnupg
         ];
         files = {
           "__builtins__.pyi".text = builtins.readFile (

@@ -16,4 +16,4 @@ print(spoke.succeed(f"curl service | rg {vpsfree_ip}"))
 
 print(vpsfree.succeed("ls -al /run/secrets"))
 print(vpsfree.succeed("ls -al /run/secrets-for-users"))
-print(vpsfree.succeed("systemctl status nginx.service"))
+vpsfree.wait_for_unit("nginx.service")
