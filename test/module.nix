@@ -15,6 +15,7 @@ in
     ../sops.nix
   ];
   sops.defaultSopsFile = pkgs.lib.mkForce ./vpsfree.yaml;
+  security.pki.certificateFiles = [ ./cert/cert.pem ];
   networking.interfaces.eth1.ipv4.routes = [
     {
       address = "37.205.13.29";

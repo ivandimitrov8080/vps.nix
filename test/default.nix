@@ -41,6 +41,14 @@ pkgs.testers.runNixOSTest {
           };
         };
       };
+      system.activationScripts = {
+        nginxCerts = lib.stringAfter ["var"] ''
+          out=/var/lib/acme/idimitrov.dev
+          mkdir -p $out
+          cp ${./cert/key.pem} $out/key.pem
+          cp ${./cert/cert.pem} $out/fullchain.pem
+        '';
+      };
     };
 
     spoke = { ... }: {
