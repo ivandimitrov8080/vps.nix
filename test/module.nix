@@ -15,8 +15,10 @@ in
     ../sops.nix
   ];
   sops.defaultSopsFile = pkgs.lib.mkForce ./vpsfree.yaml;
-  security.pki.certificateFiles = [ ./cert/cert.pem ];
-  security.acme = mkForce { };
+  security = {
+    pki.certificateFiles = [ ./cert/cert.pem ];
+    acme = mkForce { };
+  };
   networking.interfaces.eth1.ipv4.routes = [
     {
       address = "37.205.13.29";
@@ -49,14 +51,23 @@ in
     nmap
     ripgrep
   ];
-  networking.useHostResolvConf = false;
-  networking.enableIPv6 = false;
-  system.activationScripts.import-test-gpg-key = {
-    deps = [ "specialfs" ];
-    text = ''
-      ${pkgs.gnupg}/bin/gpg --batch --homedir ${config.sops.gnupg.home} --import ${./gnupg.asc}
-    '';
+  networking = {
+    useHostResolvConf = false;
+    enableIPv6 = false;
   };
-  system.activationScripts.setupSecretsForUsers.deps = mkBefore [ "import-test-gpg-key" ];
+  system.activationScripts = {
+    import-test-gpg-key = {
+      deps = [ "specialfs" ];
+      text = ''
+        ${pkgs.gnupg}/bin/gpg --batch --homedir ${config.sops.gnupg.home} --import ${./gnupg.asc}
+      '';
+    };
+    setupSecretsForUsers.deps = mkBefore [ "import-test-gpg-key" ];
+  };
   services.dnscrypt-proxy.settings.offline_mode = true;
+  systemd = {
+    services = {
+      systemd-resolved.environment.SYSTEMD_LOG_LEVEL = "err";
+    };
+  };
 }

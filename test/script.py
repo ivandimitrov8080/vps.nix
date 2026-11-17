@@ -9,7 +9,12 @@ def wait_for_service(machine: BaseMachine, service: str):
     machine.wait_for_unit(f"{service}.service")
 
 def vpsfree_service_test():
-    services = ["matrix-synapse", "mautrix-telegram", "livekit", "dnscrypt-proxy", "nginx"]
+    services = ["matrix-synapse",
+                "mautrix-telegram",
+                "livekit",
+                "dnscrypt-proxy",
+                "nginx"
+                ]
     for s in services:
         wait_for_service(vpsfree, s)
 
@@ -28,6 +33,6 @@ def sops_test():
 
 
 # Order the test execution
-vpsfree_service_test()
-wireguard_test()
 sops_test()
+wireguard_test()
+vpsfree_service_test()
