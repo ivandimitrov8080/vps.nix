@@ -13,7 +13,8 @@ def vpsfree_service_test():
                 "mautrix-telegram",
                 "livekit",
                 "dnscrypt-proxy",
-                "nginx"
+                "nginx",
+                "dovecot"
                 ]
     for s in services:
         wait_for_service(vpsfree, s)

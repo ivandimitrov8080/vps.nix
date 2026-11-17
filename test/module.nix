@@ -66,8 +66,10 @@ in
   };
   services.dnscrypt-proxy.settings.offline_mode = true;
   systemd = {
+    tmpfiles.rules = [ "d /var/vmail 0750 virtualMail virtualMail -" ];
     services = {
       systemd-resolved.environment.SYSTEMD_LOG_LEVEL = "err";
+      dovecot.preStart = mkForce "";
     };
   };
 }
