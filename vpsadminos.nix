@@ -148,11 +148,21 @@ in
     environment.HOME = config.users.users.git.home;
     serviceConfig =
       let
-        exec = pkgs.writers.writeNuBin "git-mirror" ''
-          ls /var/git | where type == dir | each {|d|
-            cd $d.name; ${pkgs.git}/bin/git push --force --prune $"git@github.com:ivandimitrov8080/($d.name | path basename).git"
-          }
-        '';
+        exec =
+          pkgs.writers.writeNuBin "git-mirror"
+            {
+              makeWrapperArgs = [
+                "--prefix"
+                "PATH"
+                ":"
+                "${lib.makeBinPath (with pkgs; [ git ssh ])}"
+              ];
+            }
+            ''
+              ls /var/git | where type == dir | each {|d|
+                cd $d.name; git push --force --prune $"git@github.com:ivandimitrov8080/($d.name | path basename).git"
+              }
+            '';
       in
       {
         Type = "oneshot";
