@@ -33,15 +33,31 @@ inputs.devenv.lib.mkShell {
           })
           testDriver
           sops
+          ruff
         ];
-        files = {
-          "__builtins__.pyi".text = builtins.readFile (
-            pkgs.runCommand "__builtins__.pyi" { nativeBuildInputs = config.packages; } ''
-              export NIXOS_TEST_DRIVER_CONFIG=${testDriver.config.driverConfigurationFile}
-              ${python}/bin/python ${./dev/builtins.py} > $out
-            ''
-          );
-        };
+        files =
+          let
+            withTypes =
+              drv:
+              drv.overrideAttrs (old: {
+                buildCommand = ''
+                  ${old.buildCommand}
+                  mkdir -p $out
+                  cp "$NIX_BUILD_TOP/testScriptWithTypes" $out/testScriptWithTypes
+                  test_len=$(cat $out/test-script | wc -l)
+                  types_len=$(cat $out/testScriptWithTypes | wc -l)
+                  only_types_len=$((types_len - test_len))
+                  head -n $only_types_len $out/testScriptWithTypes > $out/types
+                '';
+              });
+            driver = withTypes inputs.self.checks.${system}.default.driver;
+          in
+          {
+            "__builtins__.pyi".text = ''
+              # ruff: noqa
+              ${builtins.readFile "${driver}/types"}
+            '';
+          };
       }
     )
   ];
