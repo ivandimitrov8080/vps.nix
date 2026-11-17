@@ -1,3 +1,6 @@
+from test_driver.machine import BaseMachine
+
+
 start_all()
 
 vpsfree_ip = "192.168.1.5"
