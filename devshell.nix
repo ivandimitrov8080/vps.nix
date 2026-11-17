@@ -18,7 +18,7 @@ inputs.devenv.lib.mkShell {
   inherit inputs pkgs;
   modules = [
     (
-      { pkgs, config, ... }:
+      { pkgs, ... }:
       {
         devenv.root = "/home/ivand/src/hosts.nix/vps.nix";
         languages = {
