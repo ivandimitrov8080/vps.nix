@@ -155,6 +155,16 @@ in
           root = pkgs.element-web;
           locations."/".extraConfig = "try_files $uri $uri/ /index.html;";
         };
+        "synapse-admin.idimitrov.dev" = tls // {
+          root = pkgs.synapse-admin;
+          locations = {
+            "/".extraConfig = "try_files $uri $uri/ /index.html;";
+            "/_synapse/admin" = {
+              proxyPass = "http://127.0.0.1:8008";
+              proxyWebsockets = true;
+            };
+          };
+        };
         "dav.idimitrov.dev" = tls // {
           locations."/" = {
             proxyPass = "http://127.0.0.1:5232/";
