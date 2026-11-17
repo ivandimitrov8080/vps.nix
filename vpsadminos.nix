@@ -155,7 +155,13 @@ in
                 "--prefix"
                 "PATH"
                 ":"
-                "${lib.makeBinPath (with pkgs; [ git openssh ])}"
+                "${lib.makeBinPath (
+                  with pkgs;
+                  [
+                    git
+                    openssh
+                  ]
+                )}"
               ];
             }
             ''

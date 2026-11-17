@@ -40,7 +40,7 @@
       nixosConfigurations.default = host;
       nixosConfigurations.vpsfree = host;
 
-      checks.${system}.default = (import ./test { inherit inputs; });
+      checks.${system}.default = import ./test { inherit inputs; };
       devShells.${system}.default = import ./devshell.nix { inherit inputs system; };
     };
 }

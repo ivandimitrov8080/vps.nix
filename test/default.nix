@@ -14,7 +14,7 @@ pkgs.testers.runNixOSTest {
   };
   containers = {
 
-    dns = { ... }: { };
+    dns = _: { };
 
     vpsfree = { lib, ... }: {
       imports = [
@@ -42,7 +42,7 @@ pkgs.testers.runNixOSTest {
         };
       };
       system.activationScripts = {
-        nginxCerts = lib.stringAfter ["var"] ''
+        nginxCerts = lib.stringAfter [ "var" ] ''
           out=/var/lib/acme/idimitrov.dev
           mkdir -p $out
           cp ${./cert/key.pem} $out/key.pem
@@ -52,7 +52,7 @@ pkgs.testers.runNixOSTest {
       };
     };
 
-    spoke = { ... }: {
+    spoke = _: {
       environment.etc."systemd/network/wg0.key".source = ./spoke.priv;
       custom.wireguard = {
         enable = true;
@@ -74,10 +74,10 @@ pkgs.testers.runNixOSTest {
       };
     };
 
-    outsider = { ... }: {
+    outsider = _: {
     };
 
-    service = { ... }: {
+    service = _: {
       networking.firewall.enable = false;
       services.nginx = {
         enable = true;

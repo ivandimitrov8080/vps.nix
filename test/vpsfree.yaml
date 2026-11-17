@@ -8,20 +8,19 @@ synapse-registration-shared-secret: ENC[AES256_GCM,data:4vvgNSmZJjgyuENyiK13HrGA
 telegram-api-hash: ENC[AES256_GCM,data:2ZFhNuTrjG6C9zFhP5S4YnU0pRPoMz9sbBQlXxoSL3c=,iv:TBNfJY5+oR0boUizKYn3aTMjxdxxiXkLDKdhuDBoT94=,tag:vWKfa9yDBFrztfvm8iczLQ==,type:str]
 telegram-api-id: ENC[AES256_GCM,data:cNM0ty55dM7HBnrTGsnJS82+yskBfCJbEFhpAAYfZLs=,iv:pyCvgUKKJF2zQsWiSrOWXDQucDmIUAQGxDoJHrbL8vY=,tag:PXBGGfgQ+MoaOzsR54ej9A==,type:str]
 sops:
-    lastmodified: "2026-11-16T15:20:06Z"
-    mac: ENC[AES256_GCM,data:wmK4idNoF8/e1Oy0u9OT8zXO85sc3NasCmfrPTfYawBSpEgueCNEVGBKOTXVEqwR/ZtMVP9lQfxQD/7L86Z8XMT2xGRQHFveq5ZqF2N2J66puEuhqbgluHXW7oN1Z6ob6Ib4Geq6aGQhAv9LL+ehwGzoBP3w/lGjl1s8rWKJGUY=,iv:64ct0hmTtqFocQRNJT9QKvQ5+vcxRXWRYxVz0Meh5Go=,tag:xIgKvxiBd2O9FwVY1iVlEQ==,type:str]
-    pgp:
-        - created_at: "2026-11-16T15:20:06Z"
-          enc: |-
-            -----BEGIN PGP MESSAGE-----
+  lastmodified: "2026-11-16T15:20:06Z"
+  mac: ENC[AES256_GCM,data:wmK4idNoF8/e1Oy0u9OT8zXO85sc3NasCmfrPTfYawBSpEgueCNEVGBKOTXVEqwR/ZtMVP9lQfxQD/7L86Z8XMT2xGRQHFveq5ZqF2N2J66puEuhqbgluHXW7oN1Z6ob6Ib4Geq6aGQhAv9LL+ehwGzoBP3w/lGjl1s8rWKJGUY=,iv:64ct0hmTtqFocQRNJT9QKvQ5+vcxRXWRYxVz0Meh5Go=,tag:xIgKvxiBd2O9FwVY1iVlEQ==,type:str]
+  pgp:
+    - created_at: "2026-11-16T15:20:06Z"
+      enc: |-
+        -----BEGIN PGP MESSAGE-----
 
-            hF4D9VoHzd7yOu8SAQdA5kzpXIH07/RiYP9CxZ3bdDxi5Fg81s/SUdLIUFA+Vw0w
-            XjHelX/xfD2ho8dXWxDqLSnv6QF6VT23eOelPWep9raLrrQ7DLUSVFfcMYFYYfxX
-            0l4BPOtNgkytyr68tptO9m7etgGBsVeKKc+EazHbu5UEotWNu1vxGW3jPxHq9x1j
-            0FZrajB3pYo4XTpd5z3AUZdfc9MK1pLp766yYazEwEB3Gv5WMyygzHeQntjCRYtU
-            =xD/O
-            -----END PGP MESSAGE-----
-          fp: E9157A97EAD33FF4161DE642B1F8A6ABC0CF065F
-    unencrypted_suffix: _unencrypted
-    version: 3.13.3
-
+        hF4D9VoHzd7yOu8SAQdA5kzpXIH07/RiYP9CxZ3bdDxi5Fg81s/SUdLIUFA+Vw0w
+        XjHelX/xfD2ho8dXWxDqLSnv6QF6VT23eOelPWep9raLrrQ7DLUSVFfcMYFYYfxX
+        0l4BPOtNgkytyr68tptO9m7etgGBsVeKKc+EazHbu5UEotWNu1vxGW3jPxHq9x1j
+        0FZrajB3pYo4XTpd5z3AUZdfc9MK1pLp766yYazEwEB3Gv5WMyygzHeQntjCRYtU
+        =xD/O
+        -----END PGP MESSAGE-----
+      fp: E9157A97EAD33FF4161DE642B1F8A6ABC0CF065F
+  unencrypted_suffix: _unencrypted
+  version: 3.13.3
