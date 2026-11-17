@@ -163,6 +163,15 @@ in
               proxyPass = "http://127.0.0.1:8008";
               proxyWebsockets = true;
             };
+            "/_matrix" = {
+              proxyPass = "http://127.0.0.1:8008";
+              proxyWebsockets = true;
+              extraConfig = "client_max_body_size 50M;";
+            };
+            "/_synapse/client" = {
+              proxyPass = "http://127.0.0.1:8008";
+              proxyWebsockets = true;
+            };
           };
         };
         "dav.idimitrov.dev" = tls // {
