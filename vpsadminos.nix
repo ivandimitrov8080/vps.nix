@@ -17,6 +17,12 @@ in
     fsType = "nfs";
     options = [ "nofail" ];
   };
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024; # 16 GiB
+    }
+  ];
   networking.hostName = "vpsfree";
   meta = {
     mail.enable = true;
