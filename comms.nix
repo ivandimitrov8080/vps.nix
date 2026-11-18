@@ -55,7 +55,37 @@
       keyFile = config.sops.templates."livekit.yaml".path;
       livekitUrl = "wss://rtc.idimitrov.dev/livekit/sfu";
     };
-
+    mautrix.bridges.telegram = {
+      type = "telegram";
+      package = pkgs.mautrix-telegram.override { withGoolm = true; };
+      environmentFiles = [ config.sops.templates."mautrix-telegram.env".path ];
+      settings = {
+        backfill = {
+          enabled = true;
+          max_initial_messages = 100;
+          max_catchup_messages = 500;
+          unread_hours_threshold = 720;
+          threads.max_initial_messages = 50;
+        };
+        network = {
+          sync = {
+            update_limit = 100;
+            create_limit = 15;
+            direct_chats = true;
+          };
+          takeout = {
+            forward_backfill = true;
+          };
+        };
+        homeserver = {
+          address = "http://localhost:8008";
+          domain = "idimitrov.dev";
+        };
+        bridge.permissions = {
+          "@ivan:idimitrov.dev" = "admin";
+        };
+      };
+    };
   };
   systemd.services.livekit.serviceConfig.LoadCredential = [
     "turn.crt:/var/lib/acme/idimitrov.dev/fullchain.pem"
