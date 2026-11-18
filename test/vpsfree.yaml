@@ -1,26 +1,26 @@
-cloudflare-dns-api-token: ENC[AES256_GCM,data:+MVxPAKrHztCMx8rZQwqdIDojao3lhP17dqy/0h92Qc=,iv:H9T5e/g2Hdg4HyZy4v/iyigXjXfNNXT4SPPmeFNRsuY=,tag:MhUP0m1uV7NvCl/5KAYwZA==,type:str]
-ivan-pass: ENC[AES256_GCM,data:k3NivUJmvYiO6B9C8gVI6CWT24kHDnKAY681IZ9rXjY=,iv:DUbQUvgoLJShb0AJTLbv4j9HA7s2d+odSL1WP2pHu2Q=,tag:9XDI29gSmJqvnQ7LCMmZNQ==,type:str]
-ivand-pass: ENC[AES256_GCM,data:BhpS7otAlPM1vwG/hYsNp0nClhxUBa6AMxgEE0/WM5k=,iv:ZpxUGALSW04lbs61c0BNgHFyA1fk/VmS8t4/p1VUp6I=,tag:F6txL4amkzJipsQlBA03aw==,type:str]
-livekit-api-key: ENC[AES256_GCM,data:SKXRUmYNvmvWObePC6Kx1ryB2y8YyLO2wpxxECfMYVo=,iv:lKSrcFScXMycaNxTpu969pEUU0TxOP06wYSQPhSOMV4=,tag:ysg70JPseuCkmIVzJ/HgXA==,type:str]
-livekit-api-secret: ENC[AES256_GCM,data:B8aS1bJ2t66+tvyruZMmKDabvxNYlskvi4zfG4Qr72o=,iv:771muYvCAgk9QzmU3YArrSEG1bTSxFleQLlC+G2Paho=,tag:PK8y4b5xFMcWgH6AUXH/IA==,type:str]
-security-pass: ENC[AES256_GCM,data:BvP+JnWgTq8g2j0tECampPBjxqBWbgUPwCL5rHYqT7c=,iv:ulIc9Cj67/CXoj/SM0Jg26ON1YHBQ2uplixpL7do/Fw=,tag:nTF27K/4O/e4v0+dO/w28A==,type:str]
-synapse-registration-shared-secret: ENC[AES256_GCM,data:4vvgNSmZJjgyuENyiK13HrGAU1cmsTOyU2tee+WbTlI=,iv:GSuYPQKvZsoqnax2UdY5H48upYAKHt0tGSKRehGP8Xk=,tag:qx6BdQzGO4SB3VbkAnBt1A==,type:str]
-telegram-api-hash: ENC[AES256_GCM,data:2ZFhNuTrjG6C9zFhP5S4YnU0pRPoMz9sbBQlXxoSL3c=,iv:TBNfJY5+oR0boUizKYn3aTMjxdxxiXkLDKdhuDBoT94=,tag:vWKfa9yDBFrztfvm8iczLQ==,type:str]
-telegram-api-id: ENC[AES256_GCM,data:cNM0ty55dM7HBnrTGsnJS82+yskBfCJbEFhpAAYfZLs=,iv:pyCvgUKKJF2zQsWiSrOWXDQucDmIUAQGxDoJHrbL8vY=,tag:PXBGGfgQ+MoaOzsR54ej9A==,type:str]
+ivand-pass: ENC[AES256_GCM,data:/FpPHjJ1BO9TffdeJJVP5qD3X0yxayJFYOTYWI/bcw2PlxcFXRiBcP6PmblndWxpZwJVG3+sOpctXR6M,iv:sBoc40HEFBUGFTRiwS4Wt5G/jOnulkcSl6R2cW35jqw=,tag:1nuhYZf+QzDz8I9bV9PfZA==,type:str]
+ivan-pass: ENC[AES256_GCM,data:ZnILSQ==,iv:JAYk4Lc0KE2r6nk4GqI/CoN6SkLyNXxZs4nPkLb/D/M=,tag:KVMZtWxwori7GnHGGvR4yw==,type:str]
+security-pass: ENC[AES256_GCM,data:jTAwuQ==,iv:V2YDbxeKxiiWa+PbRfK9j0qwE6XU4pcoEsWy6BSBHGs=,tag:QG0uj6q1yI9Q94aDqYuQvw==,type:str]
+cloudflare-dns-api-token: ENC[AES256_GCM,data:rdFb6A==,iv:hsP9YeFH4YZAz3Y8hLvsdph2Am5BvCDIp92Snf8gDyw=,tag:V1WD8OGdFuAQoeb5doa/Ug==,type:str]
+synapse-registration-shared-secret: ENC[AES256_GCM,data:1b6FvUOQMaAUnZuSHMQEwSfrqSoWkfBQ6aYfBPVJhN+OeKJYos8ST47XXmNH5bQMLvjXDoIEQOI31tDRU1nkZA==,iv:ZfRFa0oh91UGYFfsQ856SDUbJRVaHp9uuIFrm3v39j0=,tag:jS5gCGAjcabNbRV1npoaqA==,type:str]
+telegram-api-id: ENC[AES256_GCM,data:pSZPWLh1r7k=,iv:g9iktmJjQcqOxoM0CfLKrtyRxJOpVBCCY8ISc7BDQ9Q=,tag:xXle43jmBoz49UARgCj1YA==,type:str]
+telegram-api-hash: ENC[AES256_GCM,data:o9LK3/iYMaWKqLz6n2Eu7+k59DsiyJD14efNrBLMbbk=,iv:JnHVz4YQbScublXUvbdjhynJbhQfPFTvcNNlfXMHW/I=,tag:1vjQMJH/HwqhnURXY9sfHw==,type:str]
+livekit-api-key: ENC[AES256_GCM,data:Gzq4yWAYgbz39dW8NLuX,iv:qDj9TWFAyS0pa0FdrPyVyDGHtZzKUSoPOaqe+6ulexQ=,tag:GDSEI1h6Fid1k9P4/wNZsw==,type:str]
+livekit-api-secret: ENC[AES256_GCM,data:6oMT3TRhmZIzLc4f6gUieP1Qn93gRTl4vsObf2f9Tta4jVSzcTKF0RBxyIA=,iv:ypcUEECL2eL6atiayVPCJGRl4E+iaCulx5IX3bwVby4=,tag:xoHDJ08M9izXkI71DvY3rA==,type:str]
 sops:
-  lastmodified: "2026-11-16T15:20:06Z"
-  mac: ENC[AES256_GCM,data:wmK4idNoF8/e1Oy0u9OT8zXO85sc3NasCmfrPTfYawBSpEgueCNEVGBKOTXVEqwR/ZtMVP9lQfxQD/7L86Z8XMT2xGRQHFveq5ZqF2N2J66puEuhqbgluHXW7oN1Z6ob6Ib4Geq6aGQhAv9LL+ehwGzoBP3w/lGjl1s8rWKJGUY=,iv:64ct0hmTtqFocQRNJT9QKvQ5+vcxRXWRYxVz0Meh5Go=,tag:xIgKvxiBd2O9FwVY1iVlEQ==,type:str]
-  pgp:
-    - created_at: "2026-11-16T15:20:06Z"
-      enc: |-
-        -----BEGIN PGP MESSAGE-----
+    lastmodified: "2026-11-18T18:59:03Z"
+    mac: ENC[AES256_GCM,data:dfqSIhtq+zf/N45IWCfmwJfzGllKfqHb43bPLEhvPL757C8ZZJq5jV2Ju6sBuNivBkNV3mX9K33uYOnYBX3Z++8CF1NdLSM0QXz0NTPRkCd8gJsZ/LeTKbyLIKPWLGbvwoQ+JIWLMP4bQEk8DPIqIfyZsci10eKI5jK64SBVRBQ=,iv:vstVD75HOpGP69pdUHA+wgJb5snkclxQypWhx1ysVDY=,tag:oH5dIrJC+D0ANhw6pydmVg==,type:str]
+    pgp:
+        - created_at: "2026-11-18T18:59:03Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
 
-        hF4D9VoHzd7yOu8SAQdA5kzpXIH07/RiYP9CxZ3bdDxi5Fg81s/SUdLIUFA+Vw0w
-        XjHelX/xfD2ho8dXWxDqLSnv6QF6VT23eOelPWep9raLrrQ7DLUSVFfcMYFYYfxX
-        0l4BPOtNgkytyr68tptO9m7etgGBsVeKKc+EazHbu5UEotWNu1vxGW3jPxHq9x1j
-        0FZrajB3pYo4XTpd5z3AUZdfc9MK1pLp766yYazEwEB3Gv5WMyygzHeQntjCRYtU
-        =xD/O
-        -----END PGP MESSAGE-----
-      fp: E9157A97EAD33FF4161DE642B1F8A6ABC0CF065F
-  unencrypted_suffix: _unencrypted
-  version: 3.13.3
+            hF4D9VoHzd7yOu8SAQdAn2nfWskCSP7oVwdj4hRDArIa0v3+9n4qIkiGm/w0mmow
+            pJIeGIwIgVFQxCwKbsG8Jy9jQVglWxUwfRStFCura/4eVgu8GbTPVpaO0DAc8bkj
+            0l4BLet4emV+jJEKEbRZP1QnHnPOTJWSd2ZT4bhzIJ+ueLxlMnlWk5/tEOGL0hIV
+            zF7Pyk837apSF52uizTfqwrbFhunga9OHT+INpFpjl88gK4wtNjTuRj7sNgKMAZn
+            =AmVR
+            -----END PGP MESSAGE-----
+          fp: E9157A97EAD33FF4161DE642B1F8A6ABC0CF065F
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3
