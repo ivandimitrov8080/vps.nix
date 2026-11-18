@@ -2,7 +2,10 @@
   inputs = {
     configuration.url = "git://idimitrov.dev/configuration.nix";
     nixpkgs.url = "git://idimitrov.dev/nixpkgs?ref=nixos-unstable";
-    vpsadminos.url = "github:vpsfreecz/vpsadminos";
+    vpsadminos = {
+      url = "github:vpsfreecz/vpsadminos";
+      inputs.nixpkgsUnstable.follows = "nixpkgs";
+    };
     simple-nixos-mailserver = {
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
