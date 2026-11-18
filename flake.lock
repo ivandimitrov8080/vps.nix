@@ -838,11 +838,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1794890597,
-        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
+        "lastModified": 1795018522,
+        "narHash": "sha256-9YNj+L6WWn/usMNOPbW7fBl1w+CcELcSaj1JukPmoac=",
         "ref": "nixos-unstable",
-        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
-        "revCount": 1122823,
+        "rev": "58707029f3d46f95337689e647a65f7e651605c9",
+        "revCount": 1122827,
         "type": "git",
         "url": "git://idimitrov.dev/nixpkgs"
       },

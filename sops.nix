@@ -57,8 +57,8 @@ in
         };
         "mautrix-telegram.env" = {
           content = ''
-            MAUTRIX_TELEGRAM_TELEGRAM_API_ID=${ph.telegram-api-id}
-            MAUTRIX_TELEGRAM_TELEGRAM_API_HASH=${ph.telegram-api-hash}
+            MAUTRIX_TELEGRAM_NETWORK__API_ID=${ph.telegram-api-id}
+            MAUTRIX_TELEGRAM_NETWORK__API_HASH=${ph.telegram-api-hash}
           '';
           owner = "mautrix-telegram";
           group = "mautrix-telegram";
