@@ -60,6 +60,23 @@
       package = pkgs.mautrix-telegram.override { withGoolm = true; };
       environmentFiles = [ config.sops.templates."mautrix-telegram.env".path ];
       settings = {
+        backfill = {
+          enabled = true;
+          max_initial_messages = 100;
+          max_catchup_messages = 500;
+          unread_hours_threshold = 720;
+          threads.max_initial_messages = 50;
+        };
+        network = {
+          sync = {
+            update_limit = 100;
+            create_limit = 15;
+            direct_chats = true;
+          };
+          takeout = {
+            forward_backfill = true;
+          };
+        };
         homeserver = {
           address = "http://localhost:8008";
           domain = "idimitrov.dev";
