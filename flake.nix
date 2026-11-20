@@ -1,7 +1,7 @@
 {
   inputs = {
     configuration.url = "git://idimitrov.dev/configuration.nix";
-    nixpkgs.url = "git://idimitrov.dev/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "git://idimitrov.dev/nixpkgs?ref=mautrix-refactor";
     vpsadminos = {
       url = "github:vpsfreecz/vpsadminos";
       inputs.nixpkgsUnstable.follows = "nixpkgs";

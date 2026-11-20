@@ -838,16 +838,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1795018522,
-        "narHash": "sha256-9YNj+L6WWn/usMNOPbW7fBl1w+CcELcSaj1JukPmoac=",
-        "ref": "nixos-unstable",
-        "rev": "58707029f3d46f95337689e647a65f7e651605c9",
-        "revCount": 1122827,
+        "lastModified": 1795178313,
+        "narHash": "sha256-+PTLGTPuVAgH5qM+y0unrHxXqejuBevx0cF7HzSUA6A=",
+        "ref": "mautrix-refactor",
+        "rev": "344ddc16ae012c3e235b8ea3ea063f1bbea768a5",
+        "revCount": 1124501,
         "type": "git",
         "url": "git://idimitrov.dev/nixpkgs"
       },
       "original": {
-        "ref": "nixos-unstable",
+        "ref": "mautrix-refactor",
         "type": "git",
         "url": "git://idimitrov.dev/nixpkgs"
       }
@@ -870,11 +870,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1794872590,
-        "narHash": "sha256-E+XLAfnC7+bdr4qlEgRv6cdGmiqTU5oeFNKCha7epqQ=",
+        "lastModified": 1795031880,
+        "narHash": "sha256-Obi0Kr71SBfU9aaDxSncVRT4wYTjLzjMyCmmuC2XGd0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f68407657ad294471eb4b2e65d193df26edf729f",
+        "rev": "3457b69ac4aba6d9ea9a743370af160fb502db29",
         "type": "github"
       },
       "original": {
@@ -1182,11 +1182,11 @@
         "ruby-lxc": "ruby-lxc"
       },
       "locked": {
-        "lastModified": 1794998017,
-        "narHash": "sha256-v80aiFVuaVsPuC8Ae9JipeOa0/ilE522GWvvTDc9KeQ=",
+        "lastModified": 1795170046,
+        "narHash": "sha256-jFi2s80qgArnnJMrxHCLq16yJCbfUeoMqWBIlsAZqW8=",
         "owner": "vpsfreecz",
         "repo": "vpsadminos",
-        "rev": "52eb4de029f385c3e2d1b614d9b6ff32bbfb29bf",
+        "rev": "30565844b628eda7af39e1f540dee9f05558146c",
         "type": "github"
       },
       "original": {

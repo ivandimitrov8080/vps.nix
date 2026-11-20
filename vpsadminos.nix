@@ -31,7 +31,7 @@ in
     nixos.enable = false;
   };
   nix.registry = mkForce { };
-  services.nginx.enable = false;
+  services.nginx.enable = true;
   networking = {
     nftables.enable = true;
     firewall = {
