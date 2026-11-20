@@ -60,6 +60,9 @@
       package = pkgs.mautrix-telegram.override { withGoolm = true; };
       environmentFiles = [ config.sops.templates."mautrix-telegram.env".path ];
       settings = {
+        logging = {
+          min_level = "debug";
+        };
         backfill = {
           enabled = true;
           max_initial_messages = 100;
