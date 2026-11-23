@@ -5,6 +5,7 @@
       settings = {
         server_name = "idimitrov.dev";
         public_baseurl = "https://matrix.idimitrov.dev";
+        app_service_config_files = [ "/var/lib/matrix-appservice-irc/registration.yml" ];
         experimental_features = {
           msc4143_enabled = true; # MatrixRTC + MSC4519 transports endpoint
           msc4222_enabled = true; # sync v2 state_after
