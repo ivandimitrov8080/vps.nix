@@ -100,7 +100,7 @@
 
         ircService = {
           mediaProxy.publicUrl = "https://matrix.idimitrov.dev/media";
-          servers."libera.chat" = {
+          servers."irc.libera.chat" = {
             name = "libera.chat";
             port = 6697;
             ssl = true;
