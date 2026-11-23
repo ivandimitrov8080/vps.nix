@@ -19,6 +19,20 @@
           per_second = 1;
           burst_count = 20;
         };
+        rc_joins = {
+          local = {
+            per_second = 0.5;
+            burst_count = 30;
+          };
+          remote = {
+            per_second = 0.1;
+            burst_count = 20;
+          };
+        };
+        rc_joins_per_room = {
+          per_second = 1;
+          burst_count = 10;
+        };
         matrix_rtc.transports = [
           {
             type = "livekit";
