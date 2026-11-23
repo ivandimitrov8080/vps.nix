@@ -92,7 +92,7 @@
     };
     matrix-appservice-irc = {
       enable = true;
-      registrationUrl = "localhost";
+      registrationUrl = "http://127.0.0.1:8009";
 
       settings = {
         homeserver.url = "https://matrix.idimitrov.dev";
