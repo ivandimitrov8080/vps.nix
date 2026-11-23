@@ -89,6 +89,46 @@
         };
       };
     };
+    matrix-appservice-irc = {
+      enable = true;
+      registrationUrl = "localhost";
+
+      settings = {
+        homeserver.url = "https://matrix.idimitrov.dev";
+        homeserver.domain = "idimitrov.dev";
+
+        ircService.servers."libera.chat" = {
+          name = "libera.chat";
+          port = 6697;
+          ssl = true;
+          dynamicChannels = {
+            enabled = true;
+            aliasTemplate = "#irc_$CHANNEL";
+          };
+          matrixClients = {
+            userTemplate = "@irc_$NICK";
+          };
+          ircClients = {
+            nickTemplate = "$LOCALPART[m]";
+            allowNickChanges = true;
+          };
+
+          membershipLists = {
+            enabled = true;
+            global = {
+              ircToMatrix = {
+                initial = true;
+                incremental = true;
+              };
+              matrixToIrc = {
+                initial = true;
+                incremental = true;
+              };
+            };
+          };
+        };
+      };
+    };
   };
   systemd.services.livekit.serviceConfig.LoadCredential = [
     "turn.crt:/var/lib/acme/idimitrov.dev/fullchain.pem"
