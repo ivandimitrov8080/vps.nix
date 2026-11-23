@@ -132,6 +132,13 @@ in
               proxyPass = "http://127.0.0.1:8008";
               proxyWebsockets = true;
             };
+            "/media/" = {
+              proxyPass = "http://127.0.0.1:11111/"; # trailing slash strips /media
+              extraConfig = ''
+                proxy_buffering off;
+                proxy_read_timeout 3600s;
+              '';
+            };
           };
         };
         "rtc.idimitrov.dev" = mkTlsHost {

@@ -97,32 +97,35 @@
         homeserver.url = "https://matrix.idimitrov.dev";
         homeserver.domain = "idimitrov.dev";
 
-        ircService.servers."libera.chat" = {
-          name = "libera.chat";
-          port = 6697;
-          ssl = true;
-          dynamicChannels = {
-            enabled = true;
-            aliasTemplate = "#irc_$CHANNEL";
-          };
-          matrixClients = {
-            userTemplate = "@irc_$NICK";
-          };
-          ircClients = {
-            nickTemplate = "$LOCALPART[m]";
-            allowNickChanges = true;
-          };
+        ircService = {
+          mediaProxy.publicUrl = "https://matrix.idimitrov.dev/media";
+          servers."libera.chat" = {
+            name = "libera.chat";
+            port = 6697;
+            ssl = true;
+            dynamicChannels = {
+              enabled = true;
+              aliasTemplate = "#irc_$CHANNEL";
+            };
+            matrixClients = {
+              userTemplate = "@irc_$NICK";
+            };
+            ircClients = {
+              nickTemplate = "$LOCALPART[m]";
+              allowNickChanges = true;
+            };
 
-          membershipLists = {
-            enabled = true;
-            global = {
-              ircToMatrix = {
-                initial = true;
-                incremental = true;
-              };
-              matrixToIrc = {
-                initial = true;
-                incremental = true;
+            membershipLists = {
+              enabled = true;
+              global = {
+                ircToMatrix = {
+                  initial = true;
+                  incremental = true;
+                };
+                matrixToIrc = {
+                  initial = true;
+                  incremental = true;
+                };
               };
             };
           };
